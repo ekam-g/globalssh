@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	cmd := exec.Command("bash", "-c", "sudo", "pacman", "-Syyu")
+	cmd := exec.Command("bash", "-c", "neofetch")
 
 	outPipe, _ := cmd.StdoutPipe()
 	stdErrorPipe, _ := cmd.StderrPipe()
