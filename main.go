@@ -8,8 +8,11 @@ import (
 )
 
 func main() {
-	cmd := exec.Command("echo", "hello")
-	cmdReader, _ := cmd.StdoutPipe()
+	cmd := exec.Command("nvim", "main.go")
+	cmdReader, err := cmd.StdoutPipe()
+	if err != nil {
+		log.Panic(err)
+	}
 	scanner := bufio.NewScanner(cmdReader)
 	done := make(chan bool)
 	go func() {
@@ -18,13 +21,13 @@ func main() {
 		}
 		done <- true
 	}()
-	err := cmd.Start()
+	err = cmd.Start()
 	if err != nil {
-		log.Fatalln(err)
+		log.Panic(err)
 	}
 	<-done
 	err = cmd.Wait()
 	if err != nil {
-		log.Fatalln(err)
+		log.Panic(err)
 	}
 }
