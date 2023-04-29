@@ -3,31 +3,39 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"log"
 	"os/exec"
+	"time"
 )
 
 func main() {
 	cmd := exec.Command("nvim", "main.go")
-	cmdReader, err := cmd.StdoutPipe()
+	stdout, err := cmd.StdoutPipe()
 	if err != nil {
-		log.Panic(err)
+		panic(err)
 	}
-	scanner := bufio.NewScanner(cmdReader)
-	done := make(chan bool)
+
+	stdin, err := cmd.StdinPipe()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	go func() {
-		for scanner.Scan() {
-			fmt.Println(scanner.Text())
-		}
-		done <- true
+		defer stdin.Close()
+		// After 3 seconds of running, send newline to cause program to exit.
+		time.Sleep(time.Second * 3)
+		io.WriteString(stdin, "\n")
 	}()
-	err = cmd.Start()
-	if err != nil {
-		log.Panic(err)
+
+	cmd.Start()
+
+	// Scan and print command's stdout
+	scanner := bufio.NewScanner(stdout)
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
 	}
-	<-done
-	err = cmd.Wait()
-	if err != nil {
-		log.Panic(err)
-	}
+
+	// Wait for program to exit.
+	cmd.Wait()
 }
