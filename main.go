@@ -2,12 +2,13 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"os/exec"
 )
 
 func main() {
-	cmd := exec.Command("bash", "-c", "nvim", "main.go")
+	cmd := exec.Command("bash", "-c", "sudo", "pacman", "-Syyu")
 
 	outPipe, _ := cmd.StdoutPipe()
 	stdErrorPipe, _ := cmd.StderrPipe()
@@ -15,8 +16,12 @@ func main() {
 	stdErrorScanner := bufio.NewScanner(stdErrorPipe)
 	go func() {
 		for scanner.Scan() {
-			log.Println(stdErrorScanner.Text())
-			log.Println(scanner.Text())
+			if scanner.Text() != "" {
+				fmt.Println(scanner.Text())
+			} else {
+				log.Println(stdErrorScanner.Text())
+
+			}
 		}
 	}()
 	cmd.Start()
