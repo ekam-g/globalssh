@@ -5,12 +5,12 @@ import (
 )
 
 func init() {
-
+	key := GetKey()
 	client := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Username: "",
-		Password: "", // no password set
-		DB:       0,  // use default DB
+		Addr:     key.Addr,
+		Username: key.Username,
+		Password: key.Password,
+		DB:       key.DB,
 	})
 
 }
