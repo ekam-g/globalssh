@@ -1,6 +1,8 @@
 package redis
 
 import (
+	"log"
+
 	"github.com/redis/go-redis/v9"
 )
 
@@ -14,4 +16,5 @@ func init() {
 		Password: key.Password,
 		DB:       key.DB,
 	})
+	log.Println("Redis Client Set!")
 }
