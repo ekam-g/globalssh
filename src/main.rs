@@ -17,10 +17,11 @@ fn main() -> Result<()> {
     // read a line from the stream
     let mut reader = BufReader::new(stream);
     let mut buf = String::new();
-    loop {
+    for _ in 0..100000 {
         reader.read_line(&mut buf)?;
         println!("{buf}");
     }
+
 
     // stop the process
     assert!(process.exit(true)?);
