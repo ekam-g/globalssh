@@ -1,8 +1,8 @@
 package main
 
 import (
+	"fmt"
 	"io"
-	"os"
 	"os/exec"
 	"time"
 
@@ -15,7 +15,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	f.Write([]byte("htop\n"))
+	f.Write([]byte("neofetch\n"))
 	go func() {
 		for {
 			buf := make([]byte, 1024)
@@ -26,9 +26,10 @@ func main() {
 				}
 				break
 			}
-			if _, err := os.Stdout.Write(buf[:n]); err != nil {
-				panic(err)
-			}
+			fmt.Print(string(buf[:n]))
+			// if _, err := os.Stdout.Write(buf[:n]); err != nil {
+			// 	panic(err)
+			// }
 		}
 	}()
 	// f.Write([]byte("ls\n"))
