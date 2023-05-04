@@ -27,9 +27,6 @@ func main() {
 				break
 			}
 			fmt.Print(string(buf[:n]))
-			// if _, err := os.Stdout.Write(buf[:n]); err != nil {
-			// 	panic(err)
-			// }
 		}
 	}()
 	// f.Write([]byte("ls\n"))
