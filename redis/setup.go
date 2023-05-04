@@ -22,26 +22,19 @@ type Key struct {
 func GetKey() Key {
 	redis_key_file, err := os.ReadFile(db_key_location)
 	if err != nil {
-		log.Print("Failed to Find Old Redis Key, Please enter new one: ")
-		file, err := os.Create(db_key_location)
-		if err != nil {
-			log.Fatal("Failed To Create File Due to: ", err)
-		}
-		var key string
-		fmt.Scan(&key)
-		file.Write([]byte(key))
-		err = file.Close()
-		if err != nil {
-			log.Fatal("Failed to write data due to:", err)
-		}
-		return key
+		log.Println("Failed to Find Old Redis Key, Please enter new one")
+		return newKey()
 	}
-
-	return string(redis_key_file)
+	return_data := Key{}
+	err = json.Unmarshal(redis_key_file, &return_data)
+	if err != nil {
+		log.Println("Failed to Parse Old Key, Overwriting Old One: ", err)
+		return newKey()
+	}
+	return return_data
 }
 
 func newKey() Key {
-	log.Print("Failed to Find Old Redis Key, Please enter new one")
 	file, err := os.Create(db_key_location)
 	if err != nil {
 		log.Fatal("Failed To Create File Due to: ", err)
@@ -60,7 +53,6 @@ func newKey() Key {
 	if err != nil {
 		log.Fatal("Failed to write data due to:", err)
 	}
-
 	return return_data
 }
 
