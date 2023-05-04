@@ -5,7 +5,6 @@ import (
 	"io"
 	"os"
 	"os/exec"
-	"time"
 
 	"github.com/creack/pty"
 )
@@ -19,8 +18,6 @@ func main() {
 	f.Write([]byte("neofetch\n"))
 	go reader(f)
 	command(f)
-	// f.Write([]byte("ls\n"))
-	time.Sleep(time.Second * 5)
 }
 
 func command(f *os.File) {
