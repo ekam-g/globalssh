@@ -15,7 +15,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	f.Write([]byte("neofetch\n"))
+	f.Write([]byte("htop\n"))
 	go func() {
 		for {
 			buf := make([]byte, 1024)
@@ -31,6 +31,6 @@ func main() {
 			}
 		}
 	}()
-	f.Write([]byte("ls\n"))
+	// f.Write([]byte("ls\n"))
 	time.Sleep(time.Second * 5)
 }
