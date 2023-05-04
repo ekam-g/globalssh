@@ -10,6 +10,12 @@ const (
 	db_key_location = "redis_key"
 )
 
+type Key interface {
+	Addr string,
+	Password string,
+	DB int
+}
+
 func get_key() string {
 	redis_key_file, err := os.ReadFile(db_key_location)
 	if err != nil {
