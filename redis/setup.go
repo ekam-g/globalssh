@@ -10,10 +10,10 @@ const (
 	db_key_location = "redis_key"
 )
 
-type Key interface {
-	Addr string,
-	Password string,
-	DB int
+type Key struct {
+	Addr     string
+	Password string
+	DB       int
 }
 
 func get_key() string {
