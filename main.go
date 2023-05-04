@@ -15,7 +15,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	f.Write([]byte("sudo pacman -Syyu\n"))
+	f.Write([]byte("neofetch\n"))
 	go func() {
 		for {
 			buf := make([]byte, 1024)
@@ -31,6 +31,6 @@ func main() {
 			}
 		}
 	}()
-	time.Sleep(time.Second * 2)
-	f.Write([]byte("y"))
+	f.Write([]byte("ls\n"))
+	time.Sleep(time.Second * 5)
 }
