@@ -13,6 +13,7 @@ const (
 )
 
 type Key struct {
+	HostName string
 	Addr     string
 	Username string
 	Password string
@@ -31,6 +32,7 @@ func GetKey() Key {
 		log.Println("Failed to Parse Old Key, Overwriting Old One: ", err)
 		return newKey()
 	}
+	HostName = return_data.HostName
 	return return_data
 }
 
@@ -44,6 +46,8 @@ func newKey() Key {
 	return_data.DB = GetInt("Enter Database Number(0 is default)")
 	return_data.Username = GetInput("Enter User Name Of Database(default is default)")
 	return_data.Password = GetInput("Enter Password Of DataBase")
+	return_data.HostName = GetInput("Enter Host Name for YOUR Server")
+	HostName = return_data.HostName
 	write_data, err := json.Marshal(return_data)
 	if err != nil {
 		log.Fatal("FATAL INTERNAL ERROR\nUNABLE TO SET JSON:", err)

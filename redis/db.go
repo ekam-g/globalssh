@@ -6,7 +6,32 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-var client *redis.Client
+const (
+	hostKey   string = "&&**$$&*#$"
+	clientKey string = "@@$$##*()$"
+)
+
+var (
+	hostMode bool = true
+	HostName string
+	client   *redis.Client
+)
+
+func GetWriteKey() string {
+	if hostMode {
+		return clientKey
+	} else {
+		return hostKey
+	}
+}
+
+func GetReadKey() string {
+	if !hostMode {
+		return clientKey
+	} else {
+		return hostKey
+	}
+}
 
 func init() {
 	key := GetKey()
