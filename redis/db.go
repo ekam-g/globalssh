@@ -12,9 +12,11 @@ const (
 )
 
 var (
-	hostMode bool = true
-	HostName string
-	client   *redis.Client
+	hostMode       bool = true
+	HostName       string
+	client         *redis.Client
+	command_stream *redis.PubSub
+	result_stream  *redis.PubSub
 )
 
 func GetWriteKey() string {
@@ -33,7 +35,7 @@ func GetReadKey() string {
 	}
 }
 
-func init() {
+func Init() {
 	key := GetKey()
 	client = redis.NewClient(&redis.Options{
 		Addr:     key.Addr,
