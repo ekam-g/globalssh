@@ -4,7 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 	"math/rand"
+	"strconv"
 	"strings"
 	"time"
 
@@ -39,7 +41,16 @@ func Extention(command_send bool) string {
 	}
 }
 
-func CheckReadKey(key int) bool {
+func CheckReadKey(data string) bool {
+	keys := strings.Split(data, "|")
+	if len(keys) != 2 {
+		log.Println("Bad Data Recived, '|' missing")
+	}
+	key, err := strconv.Atoi(keys[0])
+	if err != nil {
+		log.Println("Failed to Parse Key Int: ", err, key)
+		return false
+	}
 	if key == old_read_key {
 		return false
 	}
