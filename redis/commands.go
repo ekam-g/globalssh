@@ -79,7 +79,7 @@ func Read(commmand_version bool) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	if strings.Contains(fmt.Sprint(old_read_key), hostKey) {
+	if CheckReadKey(data.Payload) {
 		return data.Payload, errors.New("Not Allowed to read")
 	}
 	return data.Payload, nil
