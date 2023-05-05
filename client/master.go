@@ -7,6 +7,8 @@ import (
 )
 
 func Run() {
+	redis.HostMode = false
+	redis.Init()
 	go display()
 	input()
 }

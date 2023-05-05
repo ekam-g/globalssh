@@ -91,6 +91,7 @@ func AwaitData(command_version bool) string {
 		if err == nil {
 			return data
 		}
+		fmt.Println(err)
 		time.Sleep(time.Millisecond * 10)
 	}
 }

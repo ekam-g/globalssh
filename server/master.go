@@ -11,6 +11,8 @@ import (
 )
 
 func Start() {
+	redis.HostMode = true
+	redis.Init()
 	shell := exec.Command("zsh")
 	shell_pty, err := pty.Start(shell)
 	if err != nil {

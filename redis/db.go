@@ -12,7 +12,7 @@ const (
 )
 
 var (
-	hostMode       bool = true
+	HostMode       bool = true
 	HostName       string
 	client         *redis.Client
 	command_stream *redis.PubSub
@@ -20,7 +20,7 @@ var (
 )
 
 func GetWriteKey() string {
-	if hostMode {
+	if HostMode {
 		return clientKey
 	} else {
 		return hostKey
@@ -28,7 +28,7 @@ func GetWriteKey() string {
 }
 
 func GetReadKey() string {
-	if !hostMode {
+	if !HostMode {
 		return clientKey
 	} else {
 		return hostKey
