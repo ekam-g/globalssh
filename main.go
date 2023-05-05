@@ -2,43 +2,23 @@ package main
 
 import (
 	"fmt"
-	"io"
+	"global_ssh_v2/client"
+	"global_ssh_v2/server"
 	"os"
-	"os/exec"
-
-	"github.com/creack/pty"
+	"strings"
 )
 
 func main() {
-	c := exec.Command("zsh")
-	f, err := pty.Start(c)
-	if err != nil {
-		panic(err)
-	}
-	f.Write([]byte("neofetch\n"))
-	go reader(f)
-	command(f)
-}
-
-func command(f *os.File) {
-	for {
-		var input string
-		fmt.Scan(&input)
-		input += "\n"
-		f.Write([]byte(input))
-	}
-}
-
-func reader(f *os.File) {
-	for {
-		buf := make([]byte, 1024)
-		n, err := f.Read(buf)
-		if err != nil {
-			if err != io.EOF {
-				panic(err)
-			}
-			break
-		}
-		fmt.Print(string(buf[:n]))
+	switch strings.Trim(os.Args[1], " ") {
+	case "client":
+		client.Run()
+		break
+	case "server":
+		server.Start()
+		break
+	default:
+		fmt.Println("Bad Arg Given, Please Put in server or client")
+		os.Exit(1)
+		break
 	}
 }
