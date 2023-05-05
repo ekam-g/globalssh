@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"math/rand"
 	"strings"
+	"time"
 
 	"github.com/redis/go-redis/v9"
 )
@@ -71,4 +72,14 @@ func Read(commmand_version bool) (string, error) {
 		return data.Payload, errors.New("Not Allowed to read")
 	}
 	return data.Payload, nil
+}
+
+func AwaitData(command_version bool) string {
+	for {
+		data, err := Read(command_version)
+		if err == nil {
+			return data
+		}
+		time.Sleep(time.Millisecond * 10)
+	}
 }
