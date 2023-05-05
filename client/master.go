@@ -2,7 +2,7 @@ package client
 
 import (
 	"fmt"
-	"global_ssh_v2/redis"
+	"global_ssh/redis"
 	"log"
 )
 

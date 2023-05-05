@@ -24,3 +24,6 @@ go.work
 # Added by cargo
 
 /target
+
+redis_key.json
+global_ssh

@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	db_key_location = "redis_key"
+	db_key_location = "redis_key.json"
 )
 
 type Key struct {

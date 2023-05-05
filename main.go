@@ -2,13 +2,15 @@ package main
 
 import (
 	"fmt"
-	"global_ssh_v2/client"
-	"global_ssh_v2/server"
+	"global_ssh/client"
+	"global_ssh/redis"
+	"global_ssh/server"
 	"os"
 	"strings"
 )
 
 func main() {
+	redis.Init()
 	switch strings.Trim(os.Args[1], " ") {
 	case "client":
 		client.Run()

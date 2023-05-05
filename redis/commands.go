@@ -25,7 +25,7 @@ var (
 func GetConnection() {
 	ctx := context.Background()
 	command_stream = client.Subscribe(ctx, HostName+"command")
-	command_stream = client.Subscribe(ctx, HostName+"result")
+	result_stream = client.Subscribe(ctx, HostName+"result")
 }
 
 func Send(val string, command_send bool) error {

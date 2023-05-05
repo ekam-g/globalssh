@@ -43,5 +43,6 @@ func Init() {
 		Password: key.Password,
 		DB:       key.DB,
 	})
+	GetConnection()
 	log.Println("Redis Client Set!")
 }

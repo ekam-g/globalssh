@@ -1,4 +1,4 @@
-module global_ssh_v2
+module global_ssh
 
 go 1.20
 

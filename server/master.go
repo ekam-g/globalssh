@@ -1,7 +1,7 @@
 package server
 
 import (
-	"global_ssh_v2/redis"
+	"global_ssh/redis"
 	"io"
 	"log"
 	"os"
