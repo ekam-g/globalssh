@@ -30,6 +30,7 @@ func GetConnection() {
 
 func Send(val string, command_send bool) error {
 	ctx := context.Background()
+	// client.Set(ctx, "hello", "works",).Err()
 	return client.Publish(ctx, HostName+Extention(command_send), NewWriteKey()+val).Err()
 }
 
@@ -41,21 +42,22 @@ func Extention(command_send bool) string {
 	}
 }
 
-func CheckReadKey(data string) bool {
+func CheckReadKey(data string) (string, bool) {
 	keys := strings.Split(data, "|")
 	if len(keys) != 2 {
 		log.Println("Bad Data Recived, '|' missing")
+		return data, false
 	}
 	key, err := strconv.Atoi(keys[0])
 	if err != nil {
 		log.Println("Failed to Parse Key Int: ", err, key)
-		return false
+		return keys[1], false
 	}
 	if key == old_read_key {
-		return false
+		return keys[1], false
 	}
 	old_read_key = key
-	return true
+	return keys[1], true
 }
 
 func NewWriteKey() string {
@@ -79,10 +81,11 @@ func Read(commmand_version bool) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	if CheckReadKey(data.Payload) {
-		return data.Payload, errors.New("Not Allowed to read")
+	clean_data, allow := CheckReadKey(data.Payload)
+	if !allow {
+		return clean_data, errors.New("Not Allowed to read")
 	}
-	return data.Payload, nil
+	return clean_data, nil
 }
 
 func AwaitData(command_version bool) string {

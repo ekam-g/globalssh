@@ -44,5 +44,14 @@ func Init() {
 		DB:       key.DB,
 	})
 	GetConnection()
+	var err error
+	if HostMode {
+		err = Send("Server Is On", false)
+	} else {
+		err = Send("neofetch", true)
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
 	log.Println("Redis Client Set!")
 }
