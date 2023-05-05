@@ -48,7 +48,7 @@ func Init() {
 	if HostMode {
 		err = Send("Server Is On", false)
 	} else {
-		err = Send("neofetch", true)
+		err = Send("neofetch\n", true)
 	}
 	if err != nil {
 		log.Fatal(err)

@@ -1,9 +1,11 @@
 package client
 
 import (
+	"bufio"
 	"fmt"
 	"global_ssh/redis"
 	"log"
+	"os"
 )
 
 func Run() {
@@ -23,8 +25,8 @@ func display() {
 
 func input() {
 	for {
-		var input string
-		_, err := fmt.Scan(&input)
+		in := bufio.NewReader(os.Stdin)
+		input, err := in.ReadString('\n')
 		if err != nil {
 			log.Println(err)
 			continue

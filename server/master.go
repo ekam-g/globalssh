@@ -18,7 +18,6 @@ func Start() {
 	if err != nil {
 		panic(err)
 	}
-	shell_pty.Write([]byte("neofetch\n"))
 	go reader(shell_pty)
 	command(shell_pty)
 }
@@ -26,7 +25,6 @@ func Start() {
 func command(f *os.File) {
 	for {
 		var input string = redis.AwaitData(true)
-		input += "\n"
 		log.Println("Running Command: " + input)
 		f.Write([]byte(input))
 	}
