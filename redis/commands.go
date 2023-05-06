@@ -3,7 +3,6 @@ package redis
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/redis/go-redis/v9"
 )
@@ -49,6 +48,6 @@ func AwaitData(command_version bool) string {
 			return data
 		}
 		fmt.Println(err)
-		time.Sleep(time.Millisecond * 10)
+		// time.Sleep(time.Millisecond * 10)
 	}
 }
