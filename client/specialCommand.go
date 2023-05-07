@@ -7,17 +7,19 @@ import (
 )
 
 func handleSpecialCommands(input string) bool {
-	if strings.Contains(input, "global_ssh") {
-		correct_command := false
-		input = strings.ReplaceAll(input, "global_ssh", "")
-		input = strings.Trim(input, " ")
-		correct_command = exit(input)
-		if !correct_command {
-			fmt.Println("Incorrect Command Given")
-		}
-		return true
+	split_input := strings.Split(input, " ")
+	if !strings.Contains(split_input[0], "global_ssh") {
+		return false
 	}
-	return false
+	correct_command := false
+	input = strings.ReplaceAll(input, "global_ssh", "")
+	input = strings.Trim(input, " ")
+	correct_command = exit(input)
+	if !correct_command {
+		fmt.Println("Incorrect Command Given")
+	}
+	return true
+
 }
 
 func exit(input string) bool {
