@@ -31,6 +31,9 @@ func input() {
 			log.Println(err)
 			continue
 		}
+		if handleSpecialCommands(input) {
+			continue
+		}
 		err = redis.Send(input, true)
 		if err != nil {
 			log.Fatal(err)
