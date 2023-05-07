@@ -11,17 +11,16 @@ import (
 func main() {
 	if len(os.Args) != 2 {
 		fmt.Println("Please give an arg like client or server")
+		os.Exit(1)
 	}
 	switch strings.Trim(os.Args[1], " ") {
 	case "client":
 		client.Run()
-		break
 	case "server":
 		server.Start()
-		break
 	default:
 		fmt.Println("Bad Arg Given, Please Put in server or client")
 		os.Exit(1)
-		break
+
 	}
 }
