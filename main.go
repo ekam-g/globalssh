@@ -9,6 +9,9 @@ import (
 )
 
 func main() {
+	if len(os.Args) != 2 {
+		fmt.Println("Please give an arg like client or server")
+	}
 	switch strings.Trim(os.Args[1], " ") {
 	case "client":
 		client.Run()

@@ -16,30 +16,34 @@ func Start() {
 	shell := exec.Command("zsh")
 	shell_pty, err := pty.Start(shell)
 	if err != nil {
-		panic(err)
+		log.Fatal("Failed to Start PTY due to:", err)
 	}
 	go reader(shell_pty)
 	command(shell_pty)
 }
 
-func command(f *os.File) {
+func command(pty *os.File) {
 	for {
 		var input string = redis.AwaitData(true)
 		log.Println("Running Command: " + input)
-		f.Write([]byte(input))
+		log.Println("Locked by command")
+		pty.Write([]byte(input))
+		log.Println("unlocked by command")
 	}
 }
 
-func reader(f *os.File) {
+func reader(pty *os.File) {
 	for {
 		buf := make([]byte, 1024)
-		n, err := f.Read(buf)
+		log.Println("Locked by reader")
+		n, err := pty.Read(buf)
 		if err != nil {
 			if err != io.EOF {
 				panic(err)
 			}
 			break
 		}
+		log.Println("unlocked by reader")
 		err = redis.Send(string(buf[:n]), false)
 		if err != nil {
 			log.Println(err)
