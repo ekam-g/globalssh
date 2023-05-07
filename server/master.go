@@ -26,28 +26,23 @@ func command(pty *os.File) {
 	for {
 		var input string = redis.AwaitData(true)
 		log.Println("Running Command: " + input)
-		log.Println("Locked by command")
 		pty.Write([]byte(input))
-		log.Println("unlocked by command")
 	}
 }
 
 func reader(pty *os.File) {
 	for {
 		buf := make([]byte, 1024)
-		log.Println("Locked by reader")
 		n, err := pty.Read(buf)
 		if err != nil {
 			if err != io.EOF {
-				panic(err)
+				log.Println("Error While Reading: ", err)
 			}
-			break
+			continue
 		}
-		log.Println("unlocked by reader")
 		err = redis.Send(string(buf[:n]), false)
 		if err != nil {
-			log.Println(err)
+			log.Println("Failed While Sending Data: ", err)
 		}
-		// fmt.Print(string(buf[:n]))
 	}
 }
