@@ -42,11 +42,11 @@ func newKey() Key {
 		log.Fatal("Failed To Create File Due to: ", err)
 	}
 	return_data := Key{}
-	return_data.Addr = GetInput("Enter Address of Redis Database, ex: my-redis.cloud.redislabs.com:6379")
-	return_data.DB = GetInt("Enter Database Number(0 is default)")
-	return_data.Username = GetInput("Enter User Name Of Database(default is default)")
-	return_data.Password = GetInput("Enter Password Of DataBase")
-	return_data.HostName = GetInput("Enter Host Name for YOUR Server")
+	return_data.Addr = GetInput("Enter Address of Redis Database, ex: my-redis.cloud.redislabs.com:6379:")
+	return_data.DB = GetInt("Enter Database Number(0 is default):")
+	return_data.Username = GetInput("Enter User Name Of Database(default is default):")
+	return_data.Password = GetInput("Enter Password Of DataBase:")
+	return_data.HostName = GetInput("Enter Host Name for YOUR Server:")
 	HostName = return_data.HostName
 	write_data, err := json.Marshal(return_data)
 	if err != nil {
@@ -63,7 +63,7 @@ func newKey() Key {
 func GetInt(message string) int {
 	var key string
 	for {
-		fmt.Print(message)
+		fmt.Println(message)
 		fmt.Scan(&key)
 		val, err := strconv.Atoi(key)
 		if err != nil {
