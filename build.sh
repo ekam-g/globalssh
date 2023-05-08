@@ -8,8 +8,7 @@ PROJECT_NAME="global_ssh"
 tar -xzf $RELEASE_FILE
 
 # Get the list of supported platforms
-PLATFORMS=("linux/amd64" "linux/arm64" "linux/arm" "darwin/amd64" "darwin/arm64" "windows/amd64" "windows/arm64")
-
+PLATFORMS=("aix/ppc64" "android/386" "android/amd64" "android/arm" "android/arm64" "darwin/386" "darwin/amd64" "darwin/arm" "darwin/arm64" "dragonfly/amd64" "freebsd/386" "freebsd/amd64" "freebsd/arm" "freebsd/arm64" "illumos/amd64" "ios/arm64" "js/wasm" "linux/386" "linux/amd64" "linux/arm" "linux/arm64" "linux/mips" "linux/mips64" "linux/mips64le" "linux/mipsle" "linux/ppc64" "linux/ppc64le" "linux/riscv64" "linux/s390x" "netbsd/386" "netbsd/amd64" "netbsd/arm" "netbsd/arm64" "openbsd/386" "openbsd/amd64" "openbsd/arm" "openbsd/arm64" "plan9/386" "plan9/amd64" "solaris/amd64" "windows/386" "windows/amd64" "windows/arm" "windows/arm64")
 # Loop through the platforms and build the project
 for PLATFORM in "${PLATFORMS[@]}"
 do
