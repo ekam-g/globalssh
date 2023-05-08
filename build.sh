@@ -29,14 +29,15 @@ do
   GOOS=$OS GOARCH=$ARCH go build -o $OUTPUT_NAME
 
   if [ "$OS" == "windows" ]; then
-    mv $OUTPUT_NAME releases
+    zip ${OUTPUT_NAME}.zip $OUTPUT_NAME
+    mv $OUTPUT_NAME.zip releases
   else
     # Compress the output file
     tar -czf ${OUTPUT_NAME}.tar.gz $OUTPUT_NAME
     # Delete the old file 
-    rm $OUTPUT_NAME
     mv $OUTPUT_NAME.tar.gz releases
   fi
+  rm $OUTPUT_NAME
 
 done
 
