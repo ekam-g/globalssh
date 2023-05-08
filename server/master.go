@@ -13,6 +13,7 @@ import (
 func Start() {
 	redis.HostMode = true
 	redis.Init()
+	os.Setenv("TERM", "xterm-256color")
 	shell := exec.Command("zsh")
 	shell_pty, err := pty.Start(shell)
 	if err != nil {
