@@ -28,11 +28,15 @@ do
   echo "Building $OUTPUT_NAME ..."
   GOOS=$OS GOARCH=$ARCH go build -o $OUTPUT_NAME
 
-  # Compress the output file
-  tar -czf ${OUTPUT_NAME}.tar.gz $OUTPUT_NAME
-  # Delete the old file
-  rm $OUTPUT_NAME
-  mv $OUTPUT_NAME.tar.gz releases
+  if [ "$OS" == "windows" ]; then
+    mv $OUTPUT_NAME releases
+  else
+    # Compress the output file
+    tar -czf ${OUTPUT_NAME}.tar.gz $OUTPUT_NAME
+    # Delete the old file 
+    rm $OUTPUT_NAME
+    mv $OUTPUT_NAME.tar.gz releases
+  fi
 
 done
 
