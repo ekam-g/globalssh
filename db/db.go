@@ -1,4 +1,4 @@
-package redis
+package db
 
 import (
 	"log"
@@ -14,7 +14,6 @@ const (
 var (
 	HostMode       bool = true
 	HostName       string
-	client         *redis.Client
 	command_stream *redis.PubSub
 	result_stream  *redis.PubSub
 )
@@ -35,23 +34,24 @@ func GetReadKey() string {
 	}
 }
 
-func Init() {
+func Init() *redis.Client {
 	key := GetKey()
-	client = redis.NewClient(&redis.Options{
+	client := redis.NewClient(&redis.Options{
 		Addr:     key.Addr,
 		Username: key.Username,
 		Password: key.Password,
 		DB:       key.DB,
 	})
-	GetConnection()
+	GetConnection(client)
 	var err error
 	if HostMode {
-		err = Send("Server Is On", false)
+		err = Send("Server Is On", false, client)
 	} else {
-		err = Send("neofetch\n", true)
+		err = Send("neofetch\n", true, client)
 	}
 	if err != nil {
 		log.Fatal(err)
 	}
 	log.Println("Redis Client Set!")
+	return client
 }

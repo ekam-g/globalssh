@@ -1,4 +1,4 @@
-package redis
+package db
 
 import (
 	"context"
@@ -7,13 +7,13 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-func GetConnection() {
+func GetConnection(client *redis.Client) {
 	ctx := context.Background()
 	command_stream = client.Subscribe(ctx, HostName+"command")
 	result_stream = client.Subscribe(ctx, HostName+"result")
 }
 
-func Send(val string, command_send bool) error {
+func Send(val string, command_send bool, client *redis.Client) error {
 	ctx := context.Background()
 	return client.Publish(ctx, HostName+Extention(command_send), val).Err()
 }

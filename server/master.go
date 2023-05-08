@@ -1,36 +1,37 @@
 package server
 
 import (
-	"global_ssh/redis"
+	db "global_ssh/db"
 	"io"
 	"log"
 	"os"
 	"os/exec"
 
 	"github.com/creack/pty"
+	"github.com/redis/go-redis/v9"
 )
 
 func Start() {
-	redis.HostMode = true
-	redis.Init()
+	db.HostMode = true
+	client := db.Init()
 	shell := exec.Command("zsh")
 	shell_pty, err := pty.Start(shell)
 	if err != nil {
 		log.Fatal("Failed to Start PTY due to:", err)
 	}
-	go reader(shell_pty)
+	go reader(shell_pty, client)
 	command(shell_pty)
 }
 
 func command(pty *os.File) {
 	for {
-		var input string = redis.AwaitData(true)
+		var input string = db.AwaitData(true)
 		log.Println("Running Command: " + input)
 		pty.Write([]byte(input))
 	}
 }
 
-func reader(pty *os.File) {
+func reader(pty *os.File, client *redis.Client) {
 	for {
 		buf := make([]byte, 1024)
 		n, err := pty.Read(buf)
@@ -40,7 +41,7 @@ func reader(pty *os.File) {
 			}
 			continue
 		}
-		err = redis.Send(string(buf[:n]), false)
+		err = db.Send(string(buf[:n]), false, client)
 		if err != nil {
 			log.Println("Failed While Sending Data: ", err)
 		}

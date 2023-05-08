@@ -3,27 +3,29 @@ package client
 import (
 	"bufio"
 	"fmt"
-	"global_ssh/redis"
+	"global_ssh/db"
 	"log"
 	"os"
+
+	"github.com/redis/go-redis/v9"
 )
 
 func Run() {
-	redis.HostMode = false
-	redis.Init()
+	db.HostMode = false
+	client := db.Init()
 	go display()
-	input()
+	input(client)
 }
 
 func display() {
 	for {
-		data := redis.AwaitData(false)
+		data := db.AwaitData(false)
 		fmt.Print(data)
 	}
 
 }
 
-func input() {
+func input(client *redis.Client) {
 	for {
 		in := bufio.NewReader(os.Stdin)
 		input, err := in.ReadString('\n')
@@ -34,7 +36,7 @@ func input() {
 		if handleSpecialCommands(input) {
 			continue
 		}
-		err = redis.Send(input, true)
+		err = db.Send(input, true, client)
 		if err != nil {
 			log.Fatal(err)
 		}
