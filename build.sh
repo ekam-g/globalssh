@@ -4,6 +4,9 @@
 RELEASE_FILE="releases"
 PROJECT_NAME="global_ssh"
 
+# Delete Old File
+rm -r $RELEASE_FILE
+
 # Create the release file
 mkdir $RELEASE_FILE
 
