@@ -13,6 +13,7 @@ import (
 func Run() {
 	db.HostMode = false
 	client := db.Init()
+	go signalHandler(client)
 	go display()
 	input(client)
 }

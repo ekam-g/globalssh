@@ -1,7 +1,7 @@
 package server
 
 import (
-	db "global_ssh/db"
+	"global_ssh/db"
 	"io"
 	"log"
 	"os"
