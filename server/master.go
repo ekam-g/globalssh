@@ -14,6 +14,7 @@ import (
 func Start() {
 	db.HostMode = true
 	client := db.Init()
+	os.Setenv("TERM", "xterm-256color")
 	shell := exec.Command("zsh")
 	shell_pty, err := pty.Start(shell)
 	if err != nil {
