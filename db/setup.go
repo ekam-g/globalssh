@@ -21,7 +21,7 @@ type Key struct {
 }
 
 func GetKey() Key {
-	redis_key_file, err := os.ReadFile(db_key_location)
+	redis_key_file, err := tryRead()
 	if err != nil {
 		log.Println("Failed to Find Old Redis Key, Please enter new one")
 		return newKey()
@@ -37,7 +37,7 @@ func GetKey() Key {
 }
 
 func newKey() Key {
-	file, err := os.Create(db_key_location)
+	file, err := tryCreate()
 	if err != nil {
 		log.Fatal("Failed To Create File Due to: ", err)
 	}
@@ -79,4 +79,44 @@ func GetInput(message string) string {
 	fmt.Print(message)
 	fmt.Scan(&key)
 	return key
+}
+
+func tryRead() ([]byte, error) {
+	data, err := os.ReadFile("/var/cache/" + db_key_location)
+	if err == nil {
+		return data, nil
+	}
+	path, ok := os.LookupEnv("HOME")
+	if ok {
+		path += db_key_location
+		data, err := os.ReadFile(path)
+		if err == nil {
+			return data, nil
+		}
+	}
+	data, err = os.ReadFile("C:\\" + db_key_location)
+	if err == nil {
+		return data, nil
+	}
+	return nil, err
+}
+
+func tryCreate() (*os.File, error) {
+	data, err := os.Create("/var/cache/" + db_key_location)
+	if err == nil {
+		return data, nil
+	}
+	path, ok := os.LookupEnv("HOME")
+	if ok {
+		path += db_key_location
+		data, err := os.Create(path)
+		if err == nil {
+			return data, nil
+		}
+	}
+	data, err = os.Create("C:\\" + db_key_location)
+	if err == nil {
+		return data, nil
+	}
+	return nil, err
 }
