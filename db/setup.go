@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"strconv"
 )
 
@@ -82,23 +83,15 @@ func GetInput(message string) string {
 }
 
 func tryRead() ([]byte, error) {
-	data, err := os.ReadFile("/var/cache/" + db_key_location)
+	homeDir, err := os.UserHomeDir()
 	if err == nil {
-		return data, nil
-	}
-	path, ok := os.LookupEnv("HOME")
-	if ok {
-		path += db_key_location
-		data, err := os.ReadFile(path)
+		filePath := filepath.Join(homeDir, db_key_location)
+		data, err := os.ReadFile(filePath)
 		if err == nil {
 			return data, nil
 		}
 	}
-	data, err = os.ReadFile("~/" + db_key_location)
-	if err == nil {
-		return data, nil
-	}
-	data, err = os.ReadFile("/" + db_key_location)
+	data, err := os.ReadFile(db_key_location)
 	if err == nil {
 		return data, nil
 	}
@@ -110,23 +103,15 @@ func tryRead() ([]byte, error) {
 }
 
 func tryCreate() (*os.File, error) {
-	data, err := os.Create("/var/cache/" + db_key_location)
+	homeDir, err := os.UserHomeDir()
 	if err == nil {
-		return data, nil
-	}
-	path, ok := os.LookupEnv("HOME")
-	if ok {
-		path += db_key_location
-		data, err := os.Create(path)
+		filePath := filepath.Join(homeDir, db_key_location)
+		data, err := os.Create(filePath)
 		if err == nil {
 			return data, nil
 		}
 	}
-	data, err = os.Open("~/" + db_key_location)
-	if err == nil {
-		return data, nil
-	}
-	data, err = os.Open("/" + db_key_location)
+	data, err := os.Open(db_key_location)
 	if err == nil {
 		return data, nil
 	}
