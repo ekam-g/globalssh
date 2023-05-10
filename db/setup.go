@@ -94,6 +94,14 @@ func tryRead() ([]byte, error) {
 			return data, nil
 		}
 	}
+	data, err = os.ReadFile("~/" + db_key_location)
+	if err == nil {
+		return data, nil
+	}
+	data, err = os.ReadFile("/" + db_key_location)
+	if err == nil {
+		return data, nil
+	}
 	data, err = os.ReadFile("C:\\" + db_key_location)
 	if err == nil {
 		return data, nil
@@ -113,6 +121,14 @@ func tryCreate() (*os.File, error) {
 		if err == nil {
 			return data, nil
 		}
+	}
+	data, err = os.Open("~/" + db_key_location)
+	if err == nil {
+		return data, nil
+	}
+	data, err = os.Open("/" + db_key_location)
+	if err == nil {
+		return data, nil
 	}
 	data, err = os.Create("C:\\" + db_key_location)
 	if err == nil {
