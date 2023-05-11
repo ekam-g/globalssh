@@ -32,6 +32,7 @@ func input(client *redis.Client) {
 		log.Fatal(err)
 	}
 	defer term.Restore(int(os.Stdin.Fd()), oldState)
+	var special_command_data string
 	for {
 		b := make([]byte, 1)
 		_, err = os.Stdin.Read(b)
@@ -42,9 +43,10 @@ func input(client *redis.Client) {
 		if input == "" {
 			continue
 		}
-		// if handleSpecialCommands(input) {
-		// 	continue
-		// }
+		special_command_data = storeSpecialCommandData(special_command_data, input)
+		if handleSpecialCommands(special_command_data) {
+			continue
+		}
 		go func() {
 			err = db.Send(input, true, client)
 			if err != nil {
