@@ -1,13 +1,13 @@
 package client
 
 import (
-	"bufio"
 	"fmt"
 	"global_ssh/db"
 	"log"
 	"os"
 
 	"github.com/redis/go-redis/v9"
+	"golang.org/x/term"
 )
 
 func Run() {
@@ -27,19 +27,29 @@ func display() {
 }
 
 func input(client *redis.Client) {
+	oldState, err := term.MakeRaw(int(os.Stdin.Fd()))
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer term.Restore(int(os.Stdin.Fd()), oldState)
 	for {
-		in := bufio.NewReader(os.Stdin)
-		input, err := in.ReadString('\n')
+		b := make([]byte, 1)
+		_, err = os.Stdin.Read(b)
 		if err != nil {
 			log.Println(err)
+		}
+		input := string(b[0])
+		if input == "" {
 			continue
 		}
-		if handleSpecialCommands(input) {
-			continue
-		}
-		err = db.Send(input, true, client)
-		if err != nil {
-			log.Fatal(err)
-		}
+		// if handleSpecialCommands(input) {
+		// 	continue
+		// }
+		go func() {
+			err = db.Send(input, true, client)
+			if err != nil {
+				log.Println("Failed to send, due to: ", err)
+			}
+		}()
 	}
 }
