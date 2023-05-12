@@ -22,11 +22,12 @@ func Start() {
 	if err != nil {
 		log.Fatal("Failed to Start PTY due to:", err)
 	}
-	go reader(shell_pty, client)
-	command(shell_pty)
+	var mutex sync.Mutex
+	go reader(shell_pty, &mutex, client)
+	command(shell_pty, &mutex)
 }
 
-func command(pty *os.File) {
+func command(pty *os.File, mutex *sync.Mutex) {
 	var waitgroup sync.WaitGroup
 	for {
 		var input string = db.AwaitData(true)
@@ -37,23 +38,28 @@ func command(pty *os.File) {
 		waitgroup.Wait()
 		waitgroup.Add(1)
 		go func() {
+			mutex.Lock()
 			pty.Write([]byte(input))
+			mutex.Unlock()
 			waitgroup.Done()
 		}()
 	}
 }
 
-func reader(pty *os.File, client *redis.Client) {
+func reader(pty *os.File, mutex *sync.Mutex, client *redis.Client) {
 	var waitgroup sync.WaitGroup
 	for {
 		buf := make([]byte, 1024)
+		mutex.Lock()
 		n, err := pty.Read(buf)
 		if err != nil {
 			if err != io.EOF {
 				log.Println("Error While Reading: ", err)
 			}
+			mutex.Unlock()
 			continue
 		}
+		mutex.Unlock()
 		waitgroup.Wait()
 		waitgroup.Add(1)
 		go func() {
