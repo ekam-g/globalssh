@@ -6,6 +6,7 @@ PROJECT_NAME="global_ssh"
 
 # Delete Old File
 rm -r $RELEASE_FILE
+rm $PROJECT_NAME
 
 # Create the release file
 mkdir $RELEASE_FILE
@@ -28,18 +29,18 @@ do
 
   # Build the project for the platform
   echo "Building $OUTPUT_NAME ..."
-  GOOS=$OS GOARCH=$ARCH go build -o $OUTPUT_NAME
+  GOOS=$OS GOARCH=$ARCH go build -o $PROJECT_NAME
 
   if [ "$OS" == "windows" ]; then
-    zip ${OUTPUT_NAME}.zip $OUTPUT_NAME
+    zip ${OUTPUT_NAME}.zip $PROJECT_NAME
     mv $OUTPUT_NAME.zip $RELEASE_FILE
   else
     # Compress the output file
-    tar -czf ${OUTPUT_NAME}.tar.gz $OUTPUT_NAME
+    tar -czf ${OUTPUT_NAME}.tar.gz $PROJECT_NAME
     # Delete the old file 
     mv $OUTPUT_NAME.tar.gz $RELEASE_FILE
   fi
-  rm $OUTPUT_NAME
+  rm $PROJECT_NAME
 
 done
 
