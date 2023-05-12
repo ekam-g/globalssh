@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"sync"
 
 	"github.com/creack/pty"
 	"github.com/redis/go-redis/v9"
@@ -37,6 +38,7 @@ func command(pty *os.File) {
 }
 
 func reader(pty *os.File, client *redis.Client) {
+	var waitgroup sync.WaitGroup
 	for {
 		buf := make([]byte, 1024)
 		n, err := pty.Read(buf)
@@ -46,11 +48,14 @@ func reader(pty *os.File, client *redis.Client) {
 			}
 			continue
 		}
+		waitgroup.Wait()
+		waitgroup.Add(1)
 		go func() {
 			err = db.Send(string(buf[:n]), false, client)
 			if err != nil {
 				log.Println("Failed While Sending Data: ", err)
 			}
+			waitgroup.Done()
 		}()
 	}
 }
