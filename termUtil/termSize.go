@@ -16,12 +16,11 @@ import (
 const termCommand string = "&%#$&^!@%#$^KJH#G$@#$"
 
 type TermSize struct {
-	width  uint16
-	length uint16
+	Width  uint16
+	Length uint16
 }
 
 func SetSize(client *redis.Client) {
-	old_size := TermSize{}
 	for {
 		width, length, err := term.GetSize(int(os.Stdin.Fd()))
 		if err != nil {
@@ -29,13 +28,9 @@ func SetSize(client *redis.Client) {
 			return
 		}
 		term_size := TermSize{
-			width:  uint16(width),
-			length: uint16(length),
+			Width:  uint16(width),
+			Length: uint16(length),
 		}
-		if term_size == old_size {
-			continue
-		}
-		old_size = term_size
 		send_data, err := json.Marshal(term_size)
 		if err != nil {
 			log.Fatal("FATAL INTERNAL ERROR\nUNABLE TO SET JSON:", err)
@@ -59,8 +54,8 @@ func CheckGetSize(input string, pty_term *os.File) bool {
 		return false
 	}
 	window := pty.Winsize{
-		X: termSize.length,
-		Y: termSize.width,
+		X: termSize.Length,
+		Y: termSize.Width,
 	}
 	err = pty.Setsize(pty_term, &window)
 	if err != nil {
