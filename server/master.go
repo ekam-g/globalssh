@@ -40,9 +40,7 @@ func command(pty *os.File) {
 			waitgroup.Add(1)
 			mutex.Unlock()
 			pty.Write([]byte(input))
-			mutex.Lock()
 			waitgroup.Done()
-			mutex.Unlock()
 		}()
 	}
 }

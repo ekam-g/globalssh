@@ -60,9 +60,7 @@ func input(client *redis.Client) {
 			if err != nil {
 				log.Println("Failed to send, due to: ", err)
 			}
-			mutex.Lock()
 			waitgroup.Done()
-			mutex.Unlock()
 		}()
 	}
 }
