@@ -1,4 +1,4 @@
-gackage client
+package client
 
 import (
 	"fmt"
@@ -26,7 +26,6 @@ func display() {
 		data := db.AwaitData(false)
 		fmt.Print(data)
 	}
-
 }
 
 func input(client *redis.Client) {
