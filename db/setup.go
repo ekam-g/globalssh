@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"strconv"
 )
 
@@ -21,7 +22,7 @@ type Key struct {
 }
 
 func GetKey() Key {
-	redis_key_file, err := os.ReadFile(db_key_location)
+	redis_key_file, err := tryRead()
 	if err != nil {
 		log.Println("Failed to Find Old Redis Key, Please enter new one")
 		return newKey()
@@ -37,7 +38,7 @@ func GetKey() Key {
 }
 
 func newKey() Key {
-	file, err := os.Create(db_key_location)
+	file, err := tryCreate()
 	if err != nil {
 		log.Fatal("Failed To Create File Due to: ", err)
 	}
@@ -76,7 +77,49 @@ func GetInt(message string) int {
 
 func GetInput(message string) string {
 	var key string
-	fmt.Print(message)
+	fmt.Println(message)
 	fmt.Scan(&key)
 	return key
+}
+
+func tryRead() ([]byte, error) {
+	homeDir, err := os.UserHomeDir()
+	if err == nil {
+		filePath := filepath.Join(homeDir, db_key_location)
+		data, err := os.ReadFile(filePath)
+		if err == nil {
+			return data, nil
+		}
+	}
+	data, err := os.ReadFile(db_key_location)
+	if err == nil {
+		return data, nil
+	}
+	filePath := filepath.Join("C:\\", db_key_location)
+	data, err = os.ReadFile(filePath)
+	if err == nil {
+		return data, nil
+	}
+	return nil, err
+}
+
+func tryCreate() (*os.File, error) {
+	homeDir, err := os.UserHomeDir()
+	if err == nil {
+		filePath := filepath.Join(homeDir, db_key_location)
+		data, err := os.Create(filePath)
+		if err == nil {
+			return data, nil
+		}
+	}
+	data, err := os.Create(db_key_location)
+	if err == nil {
+		return data, nil
+	}
+	filePath := filepath.Join("C:\\", db_key_location)
+	data, err = os.Create(filePath)
+	if err == nil {
+		return data, nil
+	}
+	return nil, err
 }

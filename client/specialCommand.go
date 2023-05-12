@@ -13,25 +13,20 @@ import (
 )
 
 func handleSpecialCommands(input string) bool {
-	split_input := strings.Split(input, " ")
-	if !strings.Contains(split_input[0], "global_ssh") {
-		return false
-	}
-	correct_command := false
-	input = strings.ReplaceAll(input, "global_ssh", "")
-	input = strings.ReplaceAll(input, "\n", "")
-	input = strings.Trim(input, " ")
-	correct_command = exit(input)
-	if !correct_command {
-		fmt.Println("Incorrect Command Given")
-	}
-	return true
+	return exit(input)
+}
 
+func storeSpecialCommandData(currentData string, input string) string {
+	if input == " " || input == "\n" {
+		return ""
+	}
+	return currentData + input
 }
 
 func exit(input string) bool {
-	if input == "client exit" {
-		fmt.Println("Exiting Global SSH, Goodbye!")
+	//take f8 singal to end code
+	if strings.Contains(input, "client-exit") {
+		fmt.Println("\nExiting Global SSH, Goodbye!")
 		os.Exit(0)
 	}
 	return false
@@ -50,7 +45,7 @@ func signalHandler(client *redis.Client) {
 
 func sigtermHandler(amount_singled int, client *redis.Client) int {
 	if amount_singled > 10 {
-		fmt.Println("To Exit Global_SSH Please Do {global_ssh client exit}")
+		fmt.Println("To Exit Global_SSH Please Do {client-exit}")
 		return 0
 	}
 	error := db.Send("\x03", true, client)

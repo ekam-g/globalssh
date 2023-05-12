@@ -1,18 +1,20 @@
 package client
 
 import (
-	"bufio"
 	"fmt"
 	"global_ssh/db"
+	"global_ssh/termUtil"
 	"log"
 	"os"
 
 	"github.com/redis/go-redis/v9"
+	"golang.org/x/term"
 )
 
 func Run() {
 	db.HostMode = false
 	client := db.Init()
+	go termUtil.SetSize(client)
 	go signalHandler(client)
 	go display()
 	input(client)
@@ -27,19 +29,31 @@ func display() {
 }
 
 func input(client *redis.Client) {
+	oldState, err := term.MakeRaw(int(os.Stdin.Fd()))
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer term.Restore(int(os.Stdin.Fd()), oldState)
+	var special_command_data string
 	for {
-		in := bufio.NewReader(os.Stdin)
-		input, err := in.ReadString('\n')
+		b := make([]byte, 1)
+		_, err = os.Stdin.Read(b)
 		if err != nil {
 			log.Println(err)
+		}
+		input := string(b[0])
+		if input == "" {
 			continue
 		}
-		if handleSpecialCommands(input) {
+		special_command_data = storeSpecialCommandData(special_command_data, input)
+		if handleSpecialCommands(special_command_data) {
 			continue
 		}
-		err = db.Send(input, true, client)
-		if err != nil {
-			log.Fatal(err)
-		}
+		go func() {
+			err = db.Send(input, true, client)
+			if err != nil {
+				log.Println("Failed to send, due to: ", err)
+			}
+		}()
 	}
 }
