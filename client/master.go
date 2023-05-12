@@ -3,6 +3,7 @@ package client
 import (
 	"fmt"
 	"global_ssh/db"
+	"global_ssh/termUtil"
 	"log"
 	"os"
 
@@ -13,6 +14,7 @@ import (
 func Run() {
 	db.HostMode = false
 	client := db.Init()
+	go termUtil.SetSize(client)
 	go signalHandler(client)
 	go display()
 	input(client)

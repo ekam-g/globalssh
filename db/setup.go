@@ -77,7 +77,7 @@ func GetInt(message string) int {
 
 func GetInput(message string) string {
 	var key string
-	fmt.Print(message)
+	fmt.Println(message)
 	fmt.Scan(&key)
 	return key
 }
