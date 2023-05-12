@@ -21,9 +21,18 @@ func Run() {
 }
 
 func display() {
+	displayWorker := make(chan string)
+	go diplayWorker(displayWorker)
 	for {
 		data := db.AwaitData(false)
-		fmt.Print(data)
+		displayWorker <- data
+	}
+}
+
+func diplayWorker(data chan string) {
+	for {
+		display := <-data
+		fmt.Print(display)
 	}
 }
 

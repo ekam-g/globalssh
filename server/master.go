@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"sync"
 
 	"github.com/creack/pty"
 	"github.com/redis/go-redis/v9"
@@ -26,22 +25,25 @@ func Start() {
 }
 
 func command(pty *os.File) {
-	var waitgroup sync.WaitGroup
-	var mutex sync.Mutex
+	setData := make(chan string)
+	go writerWorker(setData, pty)
 	for {
 		var input string = db.AwaitData(true)
 		if termUtil.CheckGetSize(input, pty) {
 			continue
 		}
 		log.Print(input)
-		go func() {
-			mutex.Lock()
-			waitgroup.Wait()
-			waitgroup.Add(1)
-			mutex.Unlock()
-			pty.Write([]byte(input))
-			waitgroup.Done()
-		}()
+		setData <- input
+	}
+}
+
+func writerWorker(setData chan string, pty *os.File) {
+	for {
+		input := <-setData
+		_, err := pty.Write([]byte(input))
+		if err != nil {
+			log.Println(err)
+		}
 	}
 }
 
