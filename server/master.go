@@ -34,14 +34,12 @@ func command(pty *os.File, mutex *sync.Mutex) {
 		if termUtil.CheckGetSize(input, pty) {
 			continue
 		}
-		log.Println("Running Command: " + input)
+		log.Print(input)
 		waitgroup.Wait()
 		waitgroup.Add(1)
 		go func() {
-			log.Println("Locking in command")
 			mutex.Lock()
 			pty.Write([]byte(input))
-			log.Println("Unlocking in command")
 			mutex.Unlock()
 			waitgroup.Done()
 		}()
@@ -52,10 +50,7 @@ func reader(pty *os.File, mutex *sync.Mutex, client *redis.Client) {
 	var waitgroup sync.WaitGroup
 	for {
 		buf := make([]byte, 1024)
-		// tempLock(mutex)
-		mutex.Lock()
-		pty.SetReadDeadline(time.Now().Add(time.Millisecond * 100))
-		mutex.Unlock()
+		tempLock(mutex)
 		n, err := pty.Read(buf)
 		if err != nil {
 			log.Println("Error While Reading: ", err)
@@ -75,6 +70,6 @@ func reader(pty *os.File, mutex *sync.Mutex, client *redis.Client) {
 
 func tempLock(mutex *sync.Mutex) {
 	mutex.Lock()
-	time.Sleep(time.Millisecond * 5)
+	time.Sleep(time.Millisecond)
 	mutex.Unlock()
 }
