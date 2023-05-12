@@ -1,4 +1,4 @@
-package client
+gackage client
 
 import (
 	"fmt"
@@ -24,7 +24,7 @@ func Run() {
 func display() {
 	for {
 		data := db.AwaitData(false)
-		go fmt.Print(data)
+		fmt.Print(data)
 	}
 
 }
