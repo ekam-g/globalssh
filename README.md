@@ -8,8 +8,6 @@ Moreover, Global SSH is more scalable than SSH, particularly in larger networks.
 
 In summary, Global SSH offers an easier, more secure, and scalable alternative to SSH, with a simple setup process and minimal maintenance overhead.
 
-
-
 ## Features 🚀️
 
 1. Easy setup: Global SSH can be set up in less than 5 minutes with a key file named redis_key.json placed in the home directory (~) of any Unix computer, making it easy to set up hosts or clients.
@@ -20,11 +18,9 @@ In summary, Global SSH offers an easier, more secure, and scalable alternative t
 6. Platform agnostic: Global SSH client mode works on all platforms, including chips like 386 and ARM.
 7. Unix compatible: Global SSH server mode works on all Unix-based systems, but not on Windows.
 
-
-# Setup
+# Setup 👀️
 
 ## Step 1, Install
-
 
 1. First go to the release directory or vist this link https://github.com/carghai/Global_SSH_V2/tree/main/releases ![](assets/20230512_184953_image.png)
 2. Next find your OS and chip, for example if I'm an apple user with an M1 chip I will look for dawrin(apple) os and the arm64 version, It will look like global_ssh_darwin_arm64.tar.gz. If you are on x86 machine look for amd. If you try to run the binary and it doesn't work then you installed the wrong version.
@@ -33,6 +29,22 @@ In summary, Global SSH offers an easier, more secure, and scalable alternative t
    ![](assets/20230512_190234_image.png)
 4. Next extract the tar file or zip, this can be done by a tool or by the command line
 5. If your on windows, open power shell and do ``Start-Process -FilePath “<Path/global_ssh>” ``, if your having problems look [here](https://www.technewstoday.com/how-to-run-exe-in-powershell/)
-6. If you are on unix based os, go to the terminal and go into the directory of the **unzip** tar file. Then do these commands to run it. 
+6. If you are on unix based os, go to the terminal and go into the directory of the **unzip** tar file. Then do these commands to run it.
 
    ![](assets/20230512_191337_image.png)
+
+## Add To Path(unix only)
+
+1. Run these commands, then reload your shell if this does not work look [here.](https://askubuntu.com/questions/440691/add-a-binary-to-my-path)
+
+```
+#!/bin/bash
+
+echo "removing old binary"
+
+sudo rm /usr/local/bin/global_ssh
+
+echo "moving binary to path"
+
+sudo mv global_ssh /usr/local/bin
+```
