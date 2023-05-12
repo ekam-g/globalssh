@@ -70,6 +70,6 @@ func reader(pty *os.File, mutex *sync.Mutex, client *redis.Client) {
 
 func tempLock(mutex *sync.Mutex) {
 	mutex.Lock()
-	time.Sleep(time.Millisecond)
+	time.Sleep(time.Millisecond * 3)
 	mutex.Unlock()
 }
