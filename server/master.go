@@ -28,7 +28,7 @@ func command(pty *os.File) {
 	for {
 		var input string = db.AwaitData(true)
 		log.Println("Running Command: " + input)
-		pty.Write([]byte(input))
+		go pty.Write([]byte(input))
 	}
 }
 
@@ -42,9 +42,11 @@ func reader(pty *os.File, client *redis.Client) {
 			}
 			continue
 		}
-		err = db.Send(string(buf[:n]), false, client)
-		if err != nil {
-			log.Println("Failed While Sending Data: ", err)
-		}
+		go func() {
+			err = db.Send(string(buf[:n]), false, client)
+			if err != nil {
+				log.Println("Failed While Sending Data: ", err)
+			}
+		}()
 	}
 }
