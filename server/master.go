@@ -3,7 +3,6 @@ package server
 import (
 	"global_ssh/db"
 	"global_ssh/termUtil"
-	"io"
 	"log"
 	"os"
 	"os/exec"
@@ -53,12 +52,13 @@ func reader(pty *os.File, mutex *sync.Mutex, client *redis.Client) {
 	var waitgroup sync.WaitGroup
 	for {
 		buf := make([]byte, 1024)
-		tempLock(mutex)
+		// tempLock(mutex)
+		mutex.Lock()
+		pty.SetReadDeadline(time.Now().Add(time.Millisecond * 100))
+		mutex.Unlock()
 		n, err := pty.Read(buf)
 		if err != nil {
-			if err != io.EOF {
-				log.Println("Error While Reading: ", err)
-			}
+			log.Println("Error While Reading: ", err)
 			continue
 		}
 		waitgroup.Wait()
