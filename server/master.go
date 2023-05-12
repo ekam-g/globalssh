@@ -36,8 +36,10 @@ func command(pty *os.File) {
 		log.Println("Running Command: " + input)
 		waitgroup.Wait()
 		waitgroup.Add(1)
-		go pty.Write([]byte(input))
-		waitgroup.Done()
+		go func() {
+			pty.Write([]byte(input))
+			waitgroup.Done()
+		}()
 	}
 }
 
