@@ -13,7 +13,7 @@ var (
 	result_stream  *redis.PubSub
 )
 
-func Init() *redis.Client {
+func Init() (*redis.Client, string) {
 	key := GetKey()
 	client := redis.NewClient(&redis.Options{
 		Addr:     key.Addr,
@@ -29,8 +29,9 @@ func Init() *redis.Client {
 		err = Send("neofetch\n", true, client)
 	}
 	if err != nil {
-		log.Fatal(err)
+		log.Println("Failed To Make Redis Connection, Please Review Your Config And Wifi.\nAdvanced Error Details:", err)
+	} else {
+		log.Println("Redis Connection Verfied And Working, Start Global SSH!")
 	}
-	log.Println("Redis Client Set!")
-	return client
+	return client, key.Shell
 }

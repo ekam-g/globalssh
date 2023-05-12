@@ -21,7 +21,9 @@ type TermSize struct {
 }
 
 func SetSize(client *redis.Client) {
+	old_size := TermSize{}
 	for {
+		time.Sleep(time.Second * 5)
 		width, length, err := term.GetSize(int(os.Stdin.Fd()))
 		if err != nil {
 			log.Println("Failed to Get Size of Terminal")
@@ -31,6 +33,10 @@ func SetSize(client *redis.Client) {
 			Width:  uint16(width),
 			Length: uint16(length),
 		}
+		if term_size == old_size {
+			time.Sleep(time.Second * 10)
+		}
+		old_size = term_size
 		send_data, err := json.Marshal(term_size)
 		if err != nil {
 			log.Fatal("FATAL INTERNAL ERROR\nUNABLE TO SET JSON:", err)
@@ -39,7 +45,6 @@ func SetSize(client *redis.Client) {
 		if err != nil {
 			log.Println("Failed To Send Redis Data due to: ", err)
 		}
-		time.Sleep(time.Second * 5)
 	}
 }
 

@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 )
 
 const (
@@ -19,18 +20,19 @@ type Key struct {
 	Username string
 	Password string
 	DB       int
+	Shell    string
 }
 
 func GetKey() Key {
 	redis_key_file, err := tryRead()
 	if err != nil {
-		log.Println("Failed to Find Old Redis Key, Please enter new one")
+		fmt.Println("Failed to Find Old Redis Key, Please enter new one")
 		return newKey()
 	}
 	return_data := Key{}
 	err = json.Unmarshal(redis_key_file, &return_data)
 	if err != nil {
-		log.Println("Failed to Parse Old Key, Overwriting Old One: ", err)
+		fmt.Println("Failed to Parse Old Key, Overwriting Old One: ", err)
 		return newKey()
 	}
 	HostName = return_data.HostName
@@ -48,6 +50,7 @@ func newKey() Key {
 	return_data.Username = GetInput("Enter User Name Of Database(default is default):")
 	return_data.Password = GetInput("Enter Password Of DataBase:")
 	return_data.HostName = GetInput("Enter Host Name for YOUR Server:")
+	return_data.Shell = strings.Trim(GetInput("Enter What Shell You Want To Use(ex: zsh or bash)"), " ")
 	HostName = return_data.HostName
 	write_data, err := json.Marshal(return_data)
 	if err != nil {

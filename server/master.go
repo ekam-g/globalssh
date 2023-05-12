@@ -13,9 +13,9 @@ import (
 
 func Start() {
 	db.HostMode = true
-	client := db.Init()
+	client, what_shell := db.Init()
 	os.Setenv("TERM", "xterm-256color")
-	shell := exec.Command("zsh")
+	shell := exec.Command(what_shell)
 	shell_pty, err := pty.Start(shell)
 	if err != nil {
 		log.Fatal("Failed to Start PTY due to:", err)
