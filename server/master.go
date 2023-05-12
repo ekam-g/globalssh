@@ -53,15 +53,8 @@ func reader(pty *os.File, mutex *sync.Mutex, client *redis.Client) {
 	var waitgroup sync.WaitGroup
 	for {
 		buf := make([]byte, 1024)
-		log.Println("Locking in Reader")
-		mutex.Lock()
-		go func() {
-			time.Sleep(time.Millisecond * 5)
-			checkUnlock(mutex)
-		}()
+		tempLock(mutex)
 		n, err := pty.Read(buf)
-		checkUnlock(mutex)
-		log.Println("Unlocking in Reader")
 		if err != nil {
 			if err != io.EOF {
 				log.Println("Error While Reading: ", err)
@@ -80,7 +73,8 @@ func reader(pty *os.File, mutex *sync.Mutex, client *redis.Client) {
 	}
 }
 
-func checkUnlock(mutex *sync.Mutex) {
-	mutex.TryLock()
+func tempLock(mutex *sync.Mutex) {
+	mutex.Lock()
+	time.Sleep(time.Millisecond * 5)
 	mutex.Unlock()
 }
