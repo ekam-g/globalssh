@@ -6,7 +6,6 @@ import (
 	"global_ssh/termUtil"
 	"log"
 	"os"
-	"sync"
 
 	"github.com/redis/go-redis/v9"
 	"golang.org/x/term"
@@ -35,8 +34,8 @@ func input(client *redis.Client) {
 	}
 	defer term.Restore(int(os.Stdin.Fd()), oldState)
 	var special_command_data string
-	var waitgroup sync.WaitGroup
-	var mutex sync.Mutex
+	worker := make(chan string)
+	go db.SenderWorker(worker, true, client)
 	for {
 		b := make([]byte, 1)
 		_, err = os.Stdin.Read(b)
@@ -51,16 +50,7 @@ func input(client *redis.Client) {
 		if handleSpecialCommands(special_command_data) {
 			continue
 		}
-		go func() {
-			mutex.Lock()
-			waitgroup.Wait()
-			waitgroup.Add(1)
-			mutex.Unlock()
-			err = db.Send(input, true, client)
-			if err != nil {
-				log.Println("Failed to send, due to: ", err)
-			}
-			waitgroup.Done()
-		}()
+		worker <- input
+
 	}
 }

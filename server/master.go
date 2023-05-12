@@ -46,8 +46,8 @@ func command(pty *os.File) {
 }
 
 func reader(pty *os.File, client *redis.Client) {
-	var waitgroup sync.WaitGroup
-	var mutex sync.Mutex
+	worker := make(chan string)
+	go db.SenderWorker(worker, true, client)
 	for {
 		buf := make([]byte, 1024)
 		n, err := pty.Read(buf)
@@ -55,18 +55,6 @@ func reader(pty *os.File, client *redis.Client) {
 			log.Println("Error While Reading: ", err)
 			continue
 		}
-		go func() {
-			mutex.Lock()
-			waitgroup.Wait()
-			waitgroup.Add(1)
-			mutex.Unlock()
-			err = db.Send(string(buf[:n]), false, client)
-			if err != nil {
-				log.Println("Failed While Sending Data: ", err)
-			}
-			mutex.Lock()
-			waitgroup.Done()
-			mutex.Unlock()
-		}()
+		worker <- string(buf[:n])
 	}
 }
