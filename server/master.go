@@ -27,13 +27,17 @@ func Start() {
 }
 
 func command(pty *os.File) {
+	var waitgroup sync.WaitGroup
 	for {
 		var input string = db.AwaitData(true)
 		if termUtil.CheckGetSize(input, pty) {
 			continue
 		}
 		log.Println("Running Command: " + input)
-		go pty.Write([]byte(input))
+		waitgroup.Wait()
+		waitgroup.Add(1)
+		pty.Write([]byte(input))
+		waitgroup.Done()
 	}
 }
 
