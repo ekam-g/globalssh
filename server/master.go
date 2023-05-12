@@ -7,7 +7,6 @@ import (
 	"os"
 	"os/exec"
 	"sync"
-	"time"
 
 	"github.com/creack/pty"
 	"github.com/redis/go-redis/v9"
@@ -22,54 +21,54 @@ func Start() {
 	if err != nil {
 		log.Fatal("Failed to Start PTY due to:", err)
 	}
-	mutex := &sync.Mutex{}
-	go reader(shell_pty, mutex, client)
-	command(shell_pty, mutex)
+	go reader(shell_pty, client)
+	command(shell_pty)
 }
 
-func command(pty *os.File, mutex *sync.Mutex) {
+func command(pty *os.File) {
 	var waitgroup sync.WaitGroup
+	var mutex sync.Mutex
 	for {
 		var input string = db.AwaitData(true)
 		if termUtil.CheckGetSize(input, pty) {
 			continue
 		}
 		log.Print(input)
-		waitgroup.Wait()
-		waitgroup.Add(1)
 		go func() {
 			mutex.Lock()
-			pty.Write([]byte(input))
+			waitgroup.Wait()
+			waitgroup.Add(1)
 			mutex.Unlock()
+			pty.Write([]byte(input))
+			mutex.Lock()
 			waitgroup.Done()
+			mutex.Unlock()
 		}()
 	}
 }
 
-func reader(pty *os.File, mutex *sync.Mutex, client *redis.Client) {
+func reader(pty *os.File, client *redis.Client) {
 	var waitgroup sync.WaitGroup
+	var mutex sync.Mutex
 	for {
 		buf := make([]byte, 1024)
-		tempLock(mutex)
 		n, err := pty.Read(buf)
 		if err != nil {
 			log.Println("Error While Reading: ", err)
 			continue
 		}
-		waitgroup.Wait()
-		waitgroup.Add(1)
 		go func() {
+			mutex.Lock()
+			waitgroup.Wait()
+			waitgroup.Add(1)
+			mutex.Unlock()
 			err = db.Send(string(buf[:n]), false, client)
 			if err != nil {
 				log.Println("Failed While Sending Data: ", err)
 			}
+			mutex.Lock()
 			waitgroup.Done()
+			mutex.Unlock()
 		}()
 	}
-}
-
-func tempLock(mutex *sync.Mutex) {
-	mutex.Lock()
-	time.Sleep(time.Millisecond * 3)
-	mutex.Unlock()
 }
