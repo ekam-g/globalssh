@@ -44,7 +44,6 @@ func SetSize(client *redis.Client) {
 }
 
 func CheckGetSize(input string, pty_term *os.File) bool {
-	log.Println(input + "from size")
 	if !strings.Contains(input, termCommand) {
 		return false
 	}

@@ -2,6 +2,7 @@ package server
 
 import (
 	"global_ssh/db"
+	"global_ssh/termUtil"
 	"io"
 	"log"
 	"os"
@@ -27,6 +28,9 @@ func Start() {
 func command(pty *os.File) {
 	for {
 		var input string = db.AwaitData(true)
+		if termUtil.CheckGetSize(input, pty) {
+			continue
+		}
 		log.Println("Running Command: " + input)
 		pty.Write([]byte(input))
 	}
