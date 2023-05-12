@@ -28,7 +28,11 @@ In summary, Global SSH offers an easier, more secure, and scalable alternative t
 
 1. First go to the release directory or vist this link https://github.com/carghai/Global_SSH_V2/tree/main/releases ![](assets/20230512_184953_image.png)
 2. Next find your OS and chip, for example if I'm an apple user with an M1 chip I will look for dawrin(apple) os and the arm64 version, It will look like global_ssh_darwin_arm64.tar.gz. If you are on x86 machine look for amd. If you try to run the binary and it doesn't work then you installed the wrong version.
-3. Now click it then hit the download buttion in the corner 
+3. Now click it then hit the download buttion in the corner
 
    ![](assets/20230512_190234_image.png)
-3.
+4. Next extract the tar file or zip, this can be done by a tool or by the command line
+5. If your on windows, open power shell and do ``Start-Process -FilePath “<Path/global_ssh>” ``, if your having problems look [here](https://www.technewstoday.com/how-to-run-exe-in-powershell/)
+6. If you are on unix based os, go to the terminal and go into the directory of the **unzip** tar file. Then do these commands to run it. 
+
+   ![](assets/20230512_191337_image.png)
