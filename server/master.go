@@ -81,7 +81,6 @@ func reader(pty *os.File, mutex *sync.Mutex, client *redis.Client) {
 }
 
 func checkUnlock(mutex *sync.Mutex) {
-	if mutex.TryLock() {
-		mutex.Unlock()
-	}
+	mutex.TryLock()
+	mutex.Unlock()
 }
