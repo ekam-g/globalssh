@@ -51,6 +51,7 @@ func CheckGetSize(input string, pty_term *os.File) bool {
 	termSize := TermSize{}
 	err := json.Unmarshal([]byte(input), &termSize)
 	if err != nil {
+		log.Println(err)
 		return false
 	}
 	window := pty.Winsize{
