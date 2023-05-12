@@ -55,8 +55,8 @@ func CheckGetSize(input string, pty_term *os.File) bool {
 		return false
 	}
 	window := pty.Winsize{
-		X: termSize.Length,
-		Y: termSize.Width,
+		Rows: termSize.Length,
+		Cols: termSize.Width,
 	}
 	err = pty.Setsize(pty_term, &window)
 	if err != nil {
