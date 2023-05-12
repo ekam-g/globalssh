@@ -31,7 +31,7 @@ func Init() (*redis.Client, string) {
 	if err != nil {
 		log.Println("Failed To Make Redis Connection, Please Review Your Config And Wifi.\nAdvanced Error Details:", err)
 	} else {
-		log.Println("Redis Connection Verfied And Working, Start Global SSH!")
+		log.Println("Redis Connection Verfied And Working, Starting Global SSH!")
 	}
 	return client, key.Shell
 }
