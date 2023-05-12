@@ -13,6 +13,8 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
+var mutex sync.Mutex
+
 func Start() {
 	db.HostMode = true
 	client := db.Init()
@@ -22,12 +24,11 @@ func Start() {
 	if err != nil {
 		log.Fatal("Failed to Start PTY due to:", err)
 	}
-	var mutex sync.Mutex
-	go reader(shell_pty, &mutex, client)
-	command(shell_pty, &mutex)
+	go reader(shell_pty, client)
+	command(shell_pty)
 }
 
-func command(pty *os.File, mutex *sync.Mutex) {
+func command(pty *os.File) {
 	var waitgroup sync.WaitGroup
 	for {
 		var input string = db.AwaitData(true)
@@ -46,7 +47,7 @@ func command(pty *os.File, mutex *sync.Mutex) {
 	}
 }
 
-func reader(pty *os.File, mutex *sync.Mutex, client *redis.Client) {
+func reader(pty *os.File, client *redis.Client) {
 	var waitgroup sync.WaitGroup
 	for {
 		buf := make([]byte, 1024)
