@@ -8,12 +8,11 @@ import (
 	"os"
 	"os/exec"
 	"sync"
+	"time"
 
 	"github.com/creack/pty"
 	"github.com/redis/go-redis/v9"
 )
-
-var mutex sync.Mutex
 
 func Start() {
 	db.HostMode = true
@@ -24,11 +23,12 @@ func Start() {
 	if err != nil {
 		log.Fatal("Failed to Start PTY due to:", err)
 	}
-	go reader(shell_pty, client)
-	command(shell_pty)
+	mutex := &sync.Mutex{}
+	go reader(shell_pty, mutex, client)
+	command(shell_pty, mutex)
 }
 
-func command(pty *os.File) {
+func command(pty *os.File, mutex *sync.Mutex) {
 	var waitgroup sync.WaitGroup
 	for {
 		var input string = db.AwaitData(true)
@@ -39,28 +39,35 @@ func command(pty *os.File) {
 		waitgroup.Wait()
 		waitgroup.Add(1)
 		go func() {
+			log.Println("Locking in command")
 			mutex.Lock()
 			pty.Write([]byte(input))
+			log.Println("Unlocking in command")
 			mutex.Unlock()
 			waitgroup.Done()
 		}()
 	}
 }
 
-func reader(pty *os.File, client *redis.Client) {
+func reader(pty *os.File, mutex *sync.Mutex, client *redis.Client) {
 	var waitgroup sync.WaitGroup
 	for {
 		buf := make([]byte, 1024)
+		log.Println("Locking in Reader")
 		mutex.Lock()
+		go func() {
+			time.Sleep(time.Millisecond * 5)
+			checkUnlock(mutex)
+		}()
 		n, err := pty.Read(buf)
+		checkUnlock(mutex)
+		log.Println("Unlocking in Reader")
 		if err != nil {
 			if err != io.EOF {
 				log.Println("Error While Reading: ", err)
 			}
-			mutex.Unlock()
 			continue
 		}
-		mutex.Unlock()
 		waitgroup.Wait()
 		waitgroup.Add(1)
 		go func() {
@@ -70,5 +77,11 @@ func reader(pty *os.File, client *redis.Client) {
 			}
 			waitgroup.Done()
 		}()
+	}
+}
+
+func checkUnlock(mutex *sync.Mutex) {
+	if !mutex.TryLock() {
+		mutex.Unlock()
 	}
 }
