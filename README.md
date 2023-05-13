@@ -1,4 +1,4 @@
-# Welcome To Global SSH! 🎉️
+# Welcome To Global SSH Alpha! 🎉️
 
 ## Why Should I Use It?
 
@@ -83,3 +83,12 @@ $ global_ssh
 8. Finally run ``global_ssh client`` on your client computer
 9. Make sure it does not say "unable to find redis key file" otherwise you did not put it in the right place. However you can just make a new on right there too.
 10. Enjoy Global SSH 😄
+11. Be sure to reinstall to update Global SSH
+
+
+# Limitations 😕 
+
+
+1. This project is very new and it still in early alpha so please report any bugs!
+2. command like zellji with extremely heavy stdout are a bit glitchy, however this the only known command that suffers this bug.
+3. There is bit more delay on compared to SSH
