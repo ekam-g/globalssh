@@ -1,6 +1,5 @@
 # Welcome To Global SSH Alpha! 🎉️
 
-
 ![](assets/20230512_201923_image.png)
 
 ## Why Should I Use It?
