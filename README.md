@@ -20,9 +20,11 @@ In summary, Global SSH offers an easier, more secure, and scalable alternative t
 
 # Setup 👀️
 
-## Step 1, Install
+## Step 1: Install
 
-1. First go to the release directory or vist this link https://github.com/carghai/Global_SSH_V2/tree/main/releases ![](assets/20230512_184953_image.png)
+1. First go to the release directory or vist this link https://github.com/carghai/Global_SSH_V2/tree/main/releases!
+
+   ![](assets/20230512_184953_image.png)
 2. Next find your OS and chip, for example if I'm an apple user with an M1 chip I will look for dawrin(apple) os and the arm64 version, It will look like global_ssh_darwin_arm64.tar.gz. If you are on x86 machine look for amd. If you try to run the binary and it doesn't work then you installed the wrong version.
 3. Now click it then hit the download buttion in the corner
 
@@ -33,7 +35,7 @@ In summary, Global SSH offers an easier, more secure, and scalable alternative t
 
    ![](assets/20230512_191337_image.png)
 
-## Add To Path(unix only)
+## Step 2: Add To Path(unix based os only)
 
 1. Run these commands, then reload your shell if this does not work look [here.](https://askubuntu.com/questions/440691/add-a-binary-to-my-path)
 
@@ -48,3 +50,36 @@ echo "moving binary to path"
 
 sudo mv global_ssh /usr/local/bin
 ```
+
+2. To verify this work make sure to **fully close** you terminal app then try running. This **should not** return "command not found: global_ssh"
+
+```
+$ global_ssh
+```
+
+3. This is step is optional, however if you want to run it you will need to cd into the binary location and do ./global_ssh to run it.
+
+## Step 3: Redis Setup
+
+1. First go to [here](https://redis.com/try-free/) and setup your free redis cloud server(no credit card required)
+2. Next click these buttions
+
+   ![](assets/20230512_194235_image.png)
+3. Next click the database
+
+   ![](assets/20230512_194406_image.png)
+4. Now you should see the data required to use Global SSH ex: Public endpoint,Username,Password
+5. Now keep this window open
+
+## Final Step: Connecting Global SSH with Redis
+
+1. Now run global ssh on your computer, it should prompt you to put in your keys
+2. Next put in the keys from the last step
+3. When prompted pick database 0 (default)
+4. Finally in your "C:\\" or next to the exe (windows) or your home directory(~) or next to the binary you should find redis_key.json.
+5. Find the redis_key.json and move the file to any computer you want running Global SSH
+6. While moving the file make sure it is in the your home directory(~) or next to the binary then run Global SSH
+7. Now run ``global_ssh server`` on your server computer
+8. Finally run ``global_ssh client`` on your client computer
+9. Make sure it does not say "unable to find redis key file" otherwise you did not put it in the right place. However you can just make a new on right there too.
+10. Enjoy Global SSH 😄
