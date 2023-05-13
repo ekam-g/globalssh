@@ -1,5 +1,8 @@
 # Welcome To Global SSH Alpha! 🎉️
 
+
+![](assets/20230512_201923_image.png)
+
 ## Why Should I Use It?
 
 SSH can be difficult to set up and maintain, requiring software installation and configuration on both local and remote systems, as well as firewall and access control configuration. Global SSH removes this complexity, making it accessible to non-technical users.
@@ -85,9 +88,7 @@ $ global_ssh
 10. Enjoy Global SSH 😄
 11. Be sure to reinstall to update Global SSH
 
-
-# Limitations 😕 
-
+# Limitations 😕
 
 1. This project is very new and it still in early alpha so please report any bugs!
 2. command like zellji with extremely heavy stdout are a bit glitchy, however this the only known command that suffers this bug.
