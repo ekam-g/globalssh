@@ -92,3 +92,9 @@ $ global_ssh
 1. This project is very new and it still in early alpha so please report any bugs!
 2. command like zellji with extremely heavy stdout are a bit glitchy, however this the only known command that suffers this bug.
 3. There is bit more delay on compared to SSH
+
+## Contributing/Future Plans
+
+1. I have huge hope for this project an will continue to make this the best as I can
+2. I'm currently working on making less latancy and improve commands that send massive amounts of stdout (zellji) run better
+3. If you have any changes please be descriptive on what is does then I will check it then merge it.
