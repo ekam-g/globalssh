@@ -24,7 +24,7 @@ func display() {
 	displayWorker := make(chan string)
 	go diplayWorker(displayWorker)
 	for {
-		data := db.AwaitData(false)
+		data := db.AwaitData(db.Result)
 		displayWorker <- data
 	}
 }
@@ -44,7 +44,7 @@ func input(client *redis.Client) {
 	defer term.Restore(int(os.Stdin.Fd()), oldState)
 	var special_command_data string
 	worker := make(chan string)
-	go db.SenderWorker(worker, true, client)
+	go db.SenderWorker(worker, db.Command, client)
 	for {
 		b := make([]byte, 1)
 		_, err = os.Stdin.Read(b)

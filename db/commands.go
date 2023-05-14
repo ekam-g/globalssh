@@ -7,6 +7,11 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
+const (
+	Command = true
+	Result  = false
+)
+
 func GetConnection(client *redis.Client) {
 	ctx := context.Background()
 	command_stream = client.Subscribe(ctx, HostName+"command")

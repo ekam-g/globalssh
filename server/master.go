@@ -28,7 +28,7 @@ func command(pty *os.File) {
 	setData := make(chan string)
 	go writerWorker(setData, pty)
 	for {
-		var input string = db.AwaitData(true)
+		var input string = db.AwaitData(db.Command)
 		if termUtil.CheckGetSize(input, pty) {
 			continue
 		}
@@ -49,7 +49,7 @@ func writerWorker(setData chan string, pty *os.File) {
 
 func reader(pty *os.File, client *redis.Client) {
 	worker := make(chan string)
-	go db.SenderWorker(worker, true, client)
+	go db.SenderWorker(worker, db.Result, client)
 	for {
 		buf := make([]byte, 1024)
 		n, err := pty.Read(buf)
