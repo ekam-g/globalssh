@@ -12,11 +12,11 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-func handleSpecialCommands(input string) bool {
+func HandleSpecialCommands(input string) bool {
 	return exit(input)
 }
 
-func storeSpecialCommandData(currentData string, input string) string {
+func StoreSpecialCommandData(currentData string, input string) string {
 	if input == " " || input == "\n" {
 		return ""
 	}
@@ -24,7 +24,6 @@ func storeSpecialCommandData(currentData string, input string) string {
 }
 
 func exit(input string) bool {
-	//take f8 singal to end code
 	if strings.Contains(input, "client-exit") {
 		fmt.Println("\nExiting Global SSH, Goodbye!")
 		os.Exit(0)

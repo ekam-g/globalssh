@@ -1,6 +1,8 @@
 package server
 
 import (
+	"fmt"
+	"global_ssh/client"
 	"global_ssh/db"
 	"global_ssh/termUtil"
 	"log"
@@ -9,6 +11,7 @@ import (
 
 	"github.com/creack/pty"
 	"github.com/redis/go-redis/v9"
+	"golang.org/x/term"
 )
 
 func Start() {
@@ -21,6 +24,7 @@ func Start() {
 		log.Fatal("Failed to Start PTY due to:", err)
 	}
 	go reader(shell_pty, client)
+	go userReader(shell_pty)
 	command(shell_pty)
 }
 
@@ -32,7 +36,6 @@ func command(pty *os.File) {
 		if termUtil.CheckGetSize(input, pty) {
 			continue
 		}
-		log.Print(input)
 		setData <- input
 	}
 }
@@ -58,5 +61,35 @@ func reader(pty *os.File, client *redis.Client) {
 			continue
 		}
 		worker <- string(buf[:n])
+		fmt.Print(string(buf[:n]))
+	}
+}
+
+func userReader(pty *os.File) {
+	if term.IsTerminal(0) {
+		var special_command_data string
+		oldState, err := term.MakeRaw(int(os.Stdin.Fd()))
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer term.Restore(int(os.Stdin.Fd()), oldState)
+		worker := make(chan string)
+		go writerWorker(worker, pty)
+		for {
+			b := make([]byte, 1)
+			_, err = os.Stdin.Read(b)
+			if err != nil {
+				log.Println(err)
+			}
+			input := string(b[0])
+			if input == "" {
+				continue
+			}
+			special_command_data = client.StoreSpecialCommandData(special_command_data, input)
+			if client.HandleSpecialCommands(special_command_data) {
+				continue
+			}
+			worker <- input
+		}
 	}
 }

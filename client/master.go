@@ -55,8 +55,8 @@ func input(client *redis.Client) {
 		if input == "" {
 			continue
 		}
-		special_command_data = storeSpecialCommandData(special_command_data, input)
-		if handleSpecialCommands(special_command_data) {
+		special_command_data = StoreSpecialCommandData(special_command_data, input)
+		if HandleSpecialCommands(special_command_data) {
 			continue
 		}
 		worker <- input
