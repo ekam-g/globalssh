@@ -1,6 +1,14 @@
 # Welcome To Global SSH Alpha! 🎉️
 
+### Displaying Global SSH
+
 ![](assets/20230512_201923_image.png)
+
+### Showing Colaboration Feature
+
+![](assets/IMG_3040.jpg)
+
+
 
 ## Why Should I Use It?
 
@@ -19,6 +27,7 @@ In summary, Global SSH offers an easier, more secure, and scalable alternative t
 5. No port forwarding needed: Global SSH eliminates the need for port forwarding to connect hosts and clients across networks.
 6. Platform agnostic: Global SSH client mode works on all platforms, including chips like 386 and ARM.
 7. Unix compatible: Global SSH server mode works on all Unix-based systems, but not on Windows.
+8. Colaboration Feature - Allows server and client to work on a shell together
 
 # Setup 👀️
 
