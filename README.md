@@ -33,7 +33,7 @@ In summary, Global SSH offers an easier, more secure, and scalable alternative t
 
 ## Step 1: Install
 
-1. First go to the release directory or vist this link https://github.com/carghai/Global_SSH_V2/tree/main/releases!
+1. First go to the release directory or vist this link https://github.com/carghai/global_ssh/tree/main/releases!
 
    ![](assets/20230512_184953_image.png)
 2. Next find your OS and chip, for example if I'm an apple user with an M1 chip I will look for dawrin(apple) os and the arm64 version, It will look like global_ssh_darwin_arm64.tar.gz. If you are on x86 machine look for amd. If you try to run the binary and it doesn't work then you installed the wrong version.
