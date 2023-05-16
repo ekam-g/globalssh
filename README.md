@@ -8,8 +8,6 @@
 
 ![](assets/IMG_3040.jpg)
 
-
-
 ## Why Should I Use It?
 
 SSH can be difficult to set up and maintain, requiring software installation and configuration on both local and remote systems, as well as firewall and access control configuration. Global SSH removes this complexity, making it accessible to non-technical users.
@@ -27,7 +25,7 @@ In summary, Global SSH offers an easier, more secure, and scalable alternative t
 5. No port forwarding needed: Global SSH eliminates the need for port forwarding to connect hosts and clients across networks.
 6. Platform agnostic: Global SSH client mode works on all platforms, including chips like 386 and ARM.
 7. Unix compatible: Global SSH server mode works on all Unix-based systems, but not on Windows.
-8. Colaboration Feature - Allows server and client to work on a shell together
+8. Collaboration Feature - Allows server and client to work on a shell together
 
 # Setup 👀️
 
@@ -95,6 +93,12 @@ $ global_ssh
 9. Make sure it does not say "unable to find redis key file" otherwise you did not put it in the right place. However you can just make a new on right there too.
 10. Enjoy Global SSH 😄
 11. Be sure to reinstall to update Global SSH
+
+
+## How Do You Use It?
+
+1. Run ``global_ssh server`` on your host pc. It should say "Redis Connection Verfied And Working, Starting Global SSH!" and go into a into a shell. If there are no error messages you are now in global_ssh. You can type in commands and other if connected will see it
+2. To connect to your server make sure you have the same redis_key.json in the ~ location and run ``global_ssh client`` if you did everything right, you should see a noefetch command go off when you connect to your server. You can now type in commands, just note what every you type can be seen on the server computer.
 
 # Limitations 😕
 
