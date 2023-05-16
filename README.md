@@ -98,7 +98,7 @@ $ global_ssh
 ## How Do You Use It?
 
 1. Run ``global_ssh server`` on your host pc. It should say "Redis Connection Verfied And Working, Starting Global SSH!" and go into a into a shell. If there are no error messages you are now in global_ssh. You can type in commands and other if connected will see it
-2. To connect to your server make sure you have the same redis_key.json in the ~ location and run ``global_ssh client`` if you did everything right, you should see a noefetch command go off when you connect to your server. You can now type in commands, just note what every you type can be seen on the server computer.
+2. To connect to your server make sure you have the same redis_key.json in the ~ location and run ``global_ssh client`` if you did everything right, you should see a neofetch command go off when you connect to your server. You can now type in commands, just note what every you type can be seen on the server computer.
 
 # Limitations 😕
 
