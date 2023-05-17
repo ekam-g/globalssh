@@ -23,6 +23,9 @@ func bulk(ch chan string) string {
 		case val, _ := <-ch:
 			buffer += val
 		default:
+			if buffer == "" {
+				return <-ch
+			}
 			return buffer
 		}
 
