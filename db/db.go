@@ -22,7 +22,9 @@ func Init() (*redis.Client, string) {
 		DB:       key.DB,
 	})
 	GetConnection(client)
-	EncryptionKey = padKey([]byte(key.Key))
+	if key.Key != "" {
+		EncryptionKey = padKey([]byte(key.Key))
+	}
 	var err error
 	if HostMode {
 		err = Send("Server Is On", false, client)

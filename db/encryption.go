@@ -12,6 +12,9 @@ import (
 )
 
 func encrypt(text string) (string, error) {
+	if EncryptionKey == nil {
+		return text, nil
+	}
 	plaintext := []byte(text)
 	block, err := aes.NewCipher(EncryptionKey)
 	if err != nil {
@@ -39,6 +42,9 @@ func encrypt(text string) (string, error) {
 }
 
 func decrypt(text string) (string, error) {
+	if EncryptionKey == nil {
+		return text, nil
+	}
 	ciphertext := []byte(text)
 	block, err := aes.NewCipher(EncryptionKey)
 	if err != nil {
