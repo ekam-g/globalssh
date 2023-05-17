@@ -8,7 +8,7 @@ import (
 
 func SenderWorker(data chan string, HostMode bool, client *redis.Client) {
 	for {
-		send_data := bulk(data)
+		send_data := BulkData(data)
 		err := Send(send_data, HostMode, client)
 		if err != nil {
 			log.Println("Failed to send, due to: ", err)
@@ -16,7 +16,7 @@ func SenderWorker(data chan string, HostMode bool, client *redis.Client) {
 	}
 }
 
-func bulk(ch chan string) string {
+func BulkData(ch chan string) string {
 	buffer := ""
 	for {
 		select {

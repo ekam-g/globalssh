@@ -31,7 +31,7 @@ func display() {
 
 func diplayWorker(data chan string) {
 	for {
-		display := <-data
+		display := db.BulkData(data)
 		fmt.Print(display)
 	}
 }

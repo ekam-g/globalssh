@@ -46,7 +46,7 @@ func command(pty *os.File) {
 
 func writerWorker(setData chan string, pty *os.File) {
 	for {
-		input := <-setData
+		input := db.BulkData(setData)
 		_, err := pty.Write([]byte(input))
 		if err != nil {
 			log.Println(err)
