@@ -26,6 +26,12 @@ In summary, Global SSH offers an easier, more secure, and scalable alternative t
 6. Platform agnostic: Global SSH client mode works on all platforms, including chips like 386 and ARM.
 7. Unix compatible: Global SSH server mode works on all Unix-based systems, but not on Windows.
 8. Collaboration Feature - Allows server and client to work on a shell together
+9. Better Security:
+   * Global SSH provides enhanced security features to protect your server and client connections.
+   * Global SSH cannot be easily discovered or traced back to a specific location, adding an extra layer of anonymity.
+   * The Redis server used in Global SSH acts as a proxy, effectively hiding your server's IP address and making it more difficult for potential attackers to target your system.
+   * Global SSH incorporates AES encryption to secure the data transmission between the server and client, ensuring that the information remains confidential and protected from unauthorized access.
+   * The design of Global SSH ensures that no data is stored through the Redis server, further reducing the risk of an attack even if the Redis server is compromised.
 
 # Setup 👀️
 
@@ -93,7 +99,6 @@ $ global_ssh
 9. Make sure it does not say "unable to find redis key file" otherwise you did not put it in the right place. However you can just make a new on right there too.
 10. Enjoy Global SSH 😄
 11. Be sure to reinstall to update Global SSH
-
 
 ## How Do You Use It?
 
