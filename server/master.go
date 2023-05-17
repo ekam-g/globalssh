@@ -1,13 +1,17 @@
 package server
 
 import (
+	"errors"
 	"fmt"
 	"global_ssh/client"
 	"global_ssh/db"
 	"global_ssh/termUtil"
+	"io"
 	"log"
 	"os"
 	"os/exec"
+	"syscall"
+	"time"
 
 	"github.com/creack/pty"
 	"github.com/redis/go-redis/v9"
@@ -57,11 +61,19 @@ func reader(pty *os.File, client *redis.Client) {
 		buf := make([]byte, 1024)
 		n, err := pty.Read(buf)
 		if err != nil {
-			log.Println("Error While Reading: ", err)
+			if err == io.EOF {
+				break // Break the loop when the pty is closed
+			}
+			if !errors.Is(err, syscall.EAGAIN) {
+				log.Println("Error while reading:", err)
+			}
+			time.Sleep(10 * time.Millisecond) // Wait before the next read attempt
 			continue
 		}
-		worker <- string(buf[:n])
-		fmt.Print(string(buf[:n]))
+		if n > 0 {
+			worker <- string(buf[:n])
+			fmt.Print(string(buf[:n]))
+		}
 	}
 }
 
