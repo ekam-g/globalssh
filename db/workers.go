@@ -20,7 +20,7 @@ func BulkData(ch chan string) string {
 	buffer := ""
 	for {
 		select {
-		case val, _ := <-ch:
+		case val := <-ch:
 			buffer += val
 		default:
 			if buffer == "" {
