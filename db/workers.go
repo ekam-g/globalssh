@@ -31,6 +31,7 @@ func waitingWorker(wait chan struct{}, waiting_data *string, waiting_data_mx *sy
 		<-wait
 		waiting_data_mx.Lock()
 		if *waiting_data == "" {
+			waiting_data_mx.Unlock()
 			continue
 		}
 		if !mutexLocked(&allowSend) {
