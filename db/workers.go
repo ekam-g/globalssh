@@ -26,8 +26,9 @@ func SenderWorker(data chan string, HostMode bool, client *redis.Client) {
 			if !thread_on.Load() {
 				go waitingWorker(&waiting_data, &waiting_data_mx, &allowSend, &redis_send, &thread_on)
 			}
+		} else {
+			redis_send <- send_data
 		}
-		redis_send <- send_data
 	}
 }
 
