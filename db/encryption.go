@@ -11,16 +11,17 @@ import (
 	"io"
 )
 
-func encrypt(key, plaintext []byte) ([]byte, error) {
-	block, err := aes.NewCipher(key)
+func encrypt(key, text string) (string, error) {
+	plaintext := []byte(text)
+	block, err := aes.NewCipher([]byte(key))
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
 	// Generate a random initialization vector (IV)
 	iv := make([]byte, aes.BlockSize)
 	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
-		return nil, err
+		return "", err
 	}
 
 	// Pad the plaintext to a multiple of the block size
@@ -34,13 +35,14 @@ func encrypt(key, plaintext []byte) ([]byte, error) {
 	mode.CryptBlocks(ciphertext, paddedPlaintext)
 
 	// Combine the IV and ciphertext and return the result
-	return append(iv, ciphertext...), nil
+	return string(append(iv, ciphertext...)), nil
 }
 
-func decrypt(key, ciphertext []byte) ([]byte, error) {
-	block, err := aes.NewCipher(key)
+func decrypt(key, text string) (string, error) {
+	ciphertext := []byte(text)
+	block, err := aes.NewCipher([]byte(key))
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
 	// Extract the IV from the ciphertext
@@ -59,7 +61,7 @@ func decrypt(key, ciphertext []byte) ([]byte, error) {
 	// Remove padding from the decrypted plaintext
 	plaintext = unpad(plaintext)
 
-	return plaintext, nil
+	return string(plaintext), nil
 }
 
 // Pad the input to a multiple of the block size using PKCS7 padding
