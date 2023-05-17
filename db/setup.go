@@ -14,6 +14,8 @@ const (
 	db_key_location = "redis_key.json"
 )
 
+var EncryptionKey []byte
+
 type Key struct {
 	HostName string
 	Addr     string
@@ -21,6 +23,7 @@ type Key struct {
 	Password string
 	DB       int
 	Shell    string
+	Key      string
 }
 
 func GetKey() Key {
@@ -51,6 +54,7 @@ func newKey() Key {
 	return_data.Password = GetInput("Enter Password Of DataBase:")
 	return_data.HostName = GetInput("Enter Host Name for YOUR Server:")
 	return_data.Shell = strings.Trim(GetInput("Enter What Shell You Want To Use(ex: zsh or bash)"), " ")
+	return_data.Key = strings.Trim(GetInput("Enter Your Key"), " ")
 	HostName = return_data.HostName
 	write_data, err := json.Marshal(return_data)
 	if err != nil {

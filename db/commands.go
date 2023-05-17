@@ -20,7 +20,11 @@ func GetConnection(client *redis.Client) {
 
 func Send(val string, command_send bool, client *redis.Client) error {
 	ctx := context.Background()
-	return client.Publish(ctx, HostName+Extention(command_send), val).Err()
+	data, err := encrypt(val)
+	if err != nil {
+		return err
+	}
+	return client.Publish(ctx, HostName+Extention(command_send), data).Err()
 }
 
 func Extention(command_send bool) string {
@@ -43,7 +47,11 @@ func Read(commmand_version bool) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return data.Payload, nil
+	decrypted, err := decrypt(data.Payload)
+	if err != nil {
+		return "", err
+	}
+	return decrypted, nil
 }
 
 func AwaitData(command_version bool) string {

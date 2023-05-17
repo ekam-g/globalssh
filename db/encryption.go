@@ -11,9 +11,9 @@ import (
 	"io"
 )
 
-func encrypt(key, text string) (string, error) {
+func encrypt(text string) (string, error) {
 	plaintext := []byte(text)
-	block, err := aes.NewCipher([]byte(key))
+	block, err := aes.NewCipher(EncryptionKey)
 	if err != nil {
 		return "", err
 	}
@@ -38,9 +38,9 @@ func encrypt(key, text string) (string, error) {
 	return string(append(iv, ciphertext...)), nil
 }
 
-func decrypt(key, text string) (string, error) {
+func decrypt(text string) (string, error) {
 	ciphertext := []byte(text)
-	block, err := aes.NewCipher([]byte(key))
+	block, err := aes.NewCipher(EncryptionKey)
 	if err != nil {
 		return "", err
 	}
