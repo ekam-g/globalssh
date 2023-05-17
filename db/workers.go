@@ -10,25 +10,21 @@ import (
 
 func SenderWorker(data chan string, HostMode bool, client *redis.Client) {
 	var waiting_data_mx sync.Mutex
-	run := make(chan struct{})
 	waiting_data := ""
-	go waitingWorker(run, &waiting_data, &waiting_data_mx, HostMode, client)
+	go waitingWorker(&waiting_data, &waiting_data_mx, HostMode, client)
 	for {
 		send_data := <-data
 		waiting_data_mx.Lock()
 		waiting_data += send_data
 		waiting_data_mx.Unlock()
-		run <- struct{}{}
 	}
-
 }
 
-func waitingWorker(wait chan struct{}, waiting_data *string, waiting_data_mx *sync.Mutex, HostMode bool, client *redis.Client) {
+func waitingWorker(waiting_data *string, waiting_data_mx *sync.Mutex, HostMode bool, client *redis.Client) {
 	var allowSend sync.Mutex
 	redis_send := make(chan string)
 	go send(redis_send, client, &allowSend, HostMode)
 	for {
-		<-wait
 		waiting_data_mx.Lock()
 		if *waiting_data == "" {
 			waiting_data_mx.Unlock()
