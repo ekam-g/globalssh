@@ -35,9 +35,9 @@ func SenderWorker(data chan string, HostMode bool, client *redis.Client) {
 func waitingWorker(waiting_data *string, waiting_data_mx *sync.Mutex, allowSend *sync.Mutex, redis_send *chan string, thread_on *atomic.Bool) {
 	thread_on.Store(true)
 	allowSend.Lock()
-	allowSend.Unlock()
 	waiting_data_mx.Lock()
 	*redis_send <- *waiting_data
+	allowSend.Unlock()
 	waiting_data_mx.Unlock()
 	thread_on.Store(false)
 }
