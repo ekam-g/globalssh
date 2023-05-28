@@ -47,10 +47,11 @@ import (
 	"globalssh/server"
 )
 
+const help = "\nExample 'globalssh client', 'globalssh client {servername}', 'globalssh server', 'globalssh update'"
+
 func main() {
 	if !(len(os.Args) >= 2) {
-		fmt.Println("Please give an arg like client or server\n" +
-			"Example 'globalssh client', 'globalssh client {servername}' 'globalssh server'")
+		fmt.Println("Please give an arg like client or server or update" + help)
 		os.Exit(1)
 	}
 	switch strings.Trim(os.Args[1], " ") {
@@ -61,9 +62,10 @@ func main() {
 		client.Run("")
 	case "server":
 		server.Start()
+	case "update":
+		fmt.Println("To update run this command\n$ bash <( curl -s https://raw.githubusercontent.com/carghai/globalssh/main/install.sh)")
 	default:
-		fmt.Println("Bad Arg Given, Please Put in server or client\n" +
-			"Example 'globalssh client', 'globalssh client {servername}' 'globalssh server'")
+		fmt.Println("Bad Arg Given, Please Put in server or client or update" + help)
 		os.Exit(1)
 
 	}
