@@ -18,6 +18,8 @@ mv globalssh ~
 
 cd || exit
 
-sudo rm -rf globalssh
+sudo rm -rf globalssh-main
 
-echo "Welcome to globalssh, rerun to update this script"
+sudo rm globalssh.zip
+
+echo "Welcome to globalssh, rerun to update this script. If you are on mac it may not add to path"
