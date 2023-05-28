@@ -2,15 +2,19 @@
 
 cd || exit
 
-git clone https://github.com/carghai/globalssh
+curl -L https://github.com/carghai/globalssh/archive/refs/heads/main.zip > globalssh.zip
 
-cd globalssh || exit
+unzip  globalssh.zip
+
+cd globalssh-main || exit
 
 make init
 
 make deps
 
 make install
+
+mv globalssh ~
 
 cd || exit
 
