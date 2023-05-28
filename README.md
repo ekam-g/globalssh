@@ -53,17 +53,35 @@ In summary, Global SSH offers an easier, more secure, and scalable alternative t
 ```
 $ bash <( curl -s https://raw.githubusercontent.com/carghai/globalssh/main/install.sh)
 ```
+this script attempts to add the code to path, it will also put a copy of the binary in your root folder
+
 1b. You can also install via go install 
 
 ````
 $ go install github.com/carghai/globalssh@latest
 ````
 
-2. To verify this work make sure to **fully close** you terminal app then try running. This **should not** return "command not found: globalssh"
+1c. you can also git clone the repo and build it via this command 
+
+````
+$ git clone https://github.com/carghai/globalssh --single-branch
+$ cd globalssh
+$ make init 
+$ make deps
+$ go build -o globalssh
+````
+
+2. To verify this worked make sure to **fully close** you terminal app then try running. This **should not** return "command not found: globalssh"
 
 ```
 $ globalssh
 ```
+
+3. If the last step failed you will need to find the binary and add it too path manually or run via this command in it directory
+
+````
+$ ./globalssh
+````
 
 ## Step 2: Redis Setup
 
