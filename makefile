@@ -64,4 +64,3 @@ install:
 	echo "this part will only work on unix"
 	sudo mv ${BINARY_NAME} /usr/local/bin
 	go build -o ${BINARY_NAME}
-	sudo mv ${BINARY_NAME} /usr/bin
