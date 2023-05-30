@@ -40,6 +40,7 @@ package main
 
 import (
 	"fmt"
+	"globalssh/net"
 	"os"
 	"strings"
 
@@ -63,7 +64,7 @@ func main() {
 	case "server":
 		server.Start()
 	case "update":
-		fmt.Println("To update run this command\n$ bash <( curl -s https://raw.githubusercontent.com/carghai/globalssh/main/install.sh)")
+		net.Update()
 	default:
 		fmt.Println("Bad Arg Given, Please Put in server or client or update" + help)
 		os.Exit(1)

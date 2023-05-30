@@ -11,7 +11,7 @@ const send = "[\n  {\n    \"actual_time\": 1680992141,\n    \"alliances\": {\n  
 
 func TestLag(t *testing.T) {
 	sendData := strings.Split(send, "\n")
-	Db, _ := Init(false)
+	Db, _ := Init(false, "")
 	go func() {
 		dataWorker := make(chan string, ImportantWorkerLimit)
 		go Db.SenderWorker(dataWorker, Result)
@@ -31,7 +31,7 @@ func TestLag(t *testing.T) {
 
 func TestLatency(t *testing.T) {
 	time.Sleep(time.Second)
-	Db, _ := Init(false)
+	Db, _ := Init(false, "")
 	var timer time.Time
 	go func() {
 		err := Db.Send("Hello", Command)
