@@ -37,8 +37,8 @@ func Update() {
 		}
 	}()
 	go func() {
-		_, errr := io.Copy(shellPty, os.Stdin)
-		if errr != nil {
+		_, err := io.Copy(shellPty, os.Stdin)
+		if err != nil {
 			log.Printf("Failed to copy Stdin: %s\n", err)
 		}
 	}()

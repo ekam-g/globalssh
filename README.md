@@ -83,6 +83,12 @@ $ globalssh
 $ ./globalssh
 ````
 
+4. You can also update whenever you want by doing 
+
+````
+$ sudo globalssh update
+````
+
 ## Step 2: Redis Setup
 
 1. First go to [here](https://redis.com/try-free/) and setup your free redis cloud server(no credit card required)

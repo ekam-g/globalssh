@@ -26,4 +26,4 @@ sudo rm -rf globalssh-main
 
 rm globalssh.zip
 
-echo "Welcome to globalssh, rerun to update this script. If you are on mac it may not add to path"
+echo "Welcome to Global SSH, If you are on mac it may not add to path"
