@@ -37,6 +37,7 @@ func Start() {
 	if isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd()) {
 		log.Println("Starting Share Mode(Found TTY terminal)")
 		tty = true
+		go net.SetLocalSize(shellPty)
 		go userReader(shellPty)
 	}
 	go reader(shellPty, Net, tty)

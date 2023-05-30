@@ -3,6 +3,7 @@ package net
 import (
 	"fmt"
 	speedJson "github.com/json-iterator/go"
+	"github.com/mattn/go-isatty"
 	"log"
 	"os"
 	"path/filepath"
@@ -40,6 +41,9 @@ func GetKey() Key {
 }
 
 func newKey() Key {
+	if !isatty.IsTerminal(os.Stdout.Fd()) || !isatty.IsCygwinTerminal(os.Stdout.Fd()) {
+		log.Fatal("Please set Redis key/create redis key json, exiting(non-tty term)")
+	}
 	file, err := tryCreate()
 	if err != nil {
 		log.Fatal("Failed To Create File Due to: ", err)

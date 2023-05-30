@@ -24,7 +24,7 @@ func (net Net) SetSize() {
 		time.Sleep(time.Second * 5)
 		width, length, err := term.GetSize(int(os.Stdin.Fd()))
 		if err != nil {
-			log.Println("Failed to Get Size of Terminal")
+			log.Println("Failed to Get Size of Terminal due to: ", err)
 			return
 		}
 		termSize := TermSize{
@@ -46,7 +46,7 @@ func (net Net) SetSize() {
 	}
 }
 
-func CheckGetSize(input string, pty_term *os.File) bool {
+func CheckGetSize(input string, ptyTerm *os.File) bool {
 	if !strings.Contains(input, termCommand) {
 		return false
 	}
@@ -61,9 +61,30 @@ func CheckGetSize(input string, pty_term *os.File) bool {
 		Rows: termSize.Length,
 		Cols: termSize.Width,
 	}
-	err = pty.Setsize(pty_term, &window)
+	err = pty.Setsize(ptyTerm, &window)
 	if err != nil {
 		log.Println("Failed to Resize Window Due to: ", err)
 	}
 	return true
+}
+
+func SetLocalSize(ptyTerm *os.File) {
+	width, length, err := term.GetSize(int(os.Stdin.Fd()))
+	if err != nil {
+		log.Println("Failed to Get Size of Terminal due to: ", err)
+		return
+	}
+	termSize := TermSize{
+		Width:  uint16(width),
+		Length: uint16(length),
+	}
+	window := pty.Winsize{
+		Rows: termSize.Length,
+		Cols: termSize.Width,
+	}
+	err = pty.Setsize(ptyTerm, &window)
+	if err != nil {
+		log.Println("Failed to Resize Window Due to: ", err)
+	}
+
 }
