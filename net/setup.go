@@ -1,8 +1,8 @@
 package net
 
 import (
-	"encoding/json"
 	"fmt"
+	speedJson "github.com/json-iterator/go"
 	"log"
 	"os"
 	"path/filepath"
@@ -31,7 +31,7 @@ func GetKey() Key {
 		return newKey()
 	}
 	returnData := Key{}
-	err = json.Unmarshal(redisKeyFile, &returnData)
+	err = speedJson.ConfigCompatibleWithStandardLibrary.Unmarshal(redisKeyFile, &returnData)
 	if err != nil {
 		fmt.Println("Failed to Parse Old Key, Overwriting Old One: ", err)
 		return newKey()
@@ -52,7 +52,7 @@ func newKey() Key {
 	returnData.HostName = GetInput("Enter Host Name for YOUR Server:")
 	returnData.Shell = strings.Trim(GetInput("Enter What Shell You Want To Use(ex: zsh or bash)"), " ")
 	returnData.Key = strings.Trim(GetInput("Enter Your Key"), " ")
-	writeData, err := json.Marshal(returnData)
+	writeData, err := speedJson.ConfigCompatibleWithStandardLibrary.Marshal(returnData)
 	if err != nil {
 		log.Fatal("FATAL INTERNAL ERROR\nUNABLE TO SET JSON:", err)
 	}
