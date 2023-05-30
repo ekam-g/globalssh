@@ -1,4 +1,4 @@
-# Welcome To Global SSH Alpha! 🎉️
+# Welcome To Global SSH Beta! 🎉️
 
 ### Displaying Global SSH
 
