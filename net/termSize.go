@@ -1,7 +1,7 @@
 package net
 
 import (
-	"encoding/json"
+	speedJson "github.com/json-iterator/go"
 	"log"
 	"os"
 	"strings"
@@ -35,7 +35,7 @@ func (net Net) SetSize() {
 			time.Sleep(time.Second * 10)
 		}
 		oldSize = termSize
-		sendData, err := json.Marshal(termSize)
+		sendData, err := speedJson.ConfigCompatibleWithStandardLibrary.Marshal(termSize)
 		if err != nil {
 			log.Fatal("FATAL INTERNAL ERROR\nUNABLE TO SET JSON:", err)
 		}
@@ -52,7 +52,7 @@ func CheckGetSize(input string, pty_term *os.File) bool {
 	}
 	input = strings.ReplaceAll(input, termCommand, "")
 	termSize := TermSize{}
-	err := json.Unmarshal([]byte(input), &termSize)
+	err := speedJson.ConfigCompatibleWithStandardLibrary.Unmarshal([]byte(input), &termSize)
 	if err != nil {
 		log.Println(err)
 		return false

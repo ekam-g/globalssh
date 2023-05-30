@@ -14,6 +14,7 @@ deps:
 	go get github.com/redis/go-redis/v9
 	go get github.com/creack/pty
 	go get github.com/mattn/go-isatty
+	go get github.com/json-iterator/go
 
 
 build:
