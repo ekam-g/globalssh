@@ -2,9 +2,13 @@
 
 cd || exit
 
-curl -L https://github.com/carghai/globalssh/archive/refs/heads/main.zip > globalssh.zip
+sudo rm -rf globalssh-main
 
-unzip  globalssh.zip
+rm globalssh.zip
+
+curl -L https://github.com/carghai/globalssh/archive/refs/heads/main.zip > globalssh.zip || exit
+
+unzip  globalssh.zip || exit
 
 cd globalssh-main || exit
 
@@ -20,6 +24,6 @@ cd || exit
 
 sudo rm -rf globalssh-main
 
-sudo rm globalssh.zip
+rm globalssh.zip
 
 echo "Welcome to globalssh, rerun to update this script. If you are on mac it may not add to path"
