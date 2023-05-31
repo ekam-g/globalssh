@@ -10,7 +10,6 @@ tools:
 	go install golang.org/x/vuln/cmd/govulncheck@latest
 
 deps:
-	go mod tidy
 	go get github.com/redis/go-redis/v9
 	go get github.com/creack/pty
 	go get github.com/mattn/go-isatty
