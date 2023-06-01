@@ -75,9 +75,9 @@ func unpad(data []byte) []byte {
 	return data[:len(data)-padding]
 }
 
-// Pad the key to 16 bytes
+// Pad the key to 32 bytes
 func padKey(key []byte) []byte {
-	paddedKey := make([]byte, 16)
+	paddedKey := make([]byte, 32)
 	copy(paddedKey, key)
 	return paddedKey
 }
