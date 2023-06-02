@@ -77,10 +77,10 @@ $ go build -o globalssh
 $ globalssh
 ```
 
-3. If the last step failed you will need to find the binary and add it too path manually or run via this command in it directory
+3. If the last step failed you will need to run it like this, or add it to path manualy
 
 ````
-$ ./globalssh
+$ ~/./globalssh
 ````
 
 4. You can also update whenever you want by doing 
