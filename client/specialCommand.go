@@ -48,6 +48,7 @@ func sigtermHandler(amountSingled int, Net net.Net) int {
 		fmt.Println("To Exit Global_SSH Please Do {client-exit}")
 		return 0
 	}
+	//Kill command
 	err := Net.Send("\x03", true)
 	if err != nil {
 		log.Println("Failed To Send Redis Data due to: ", err)
