@@ -77,10 +77,10 @@ $ go build -o globalssh
 $ globalssh
 ```
 
-3. If the last step failed you will need to find the binary and add it too path manually or run via this command in it directory
+3. If the last step failed you will need to run it like this, or add it to path manualy
 
 ````
-$ ./globalssh
+$ ~/./globalssh
 ````
 
 4. You can also update whenever you want by doing 
@@ -133,4 +133,4 @@ $ sudo globalssh update
 2. I'm currently working on making less latancy and improve commands that send massive amounts of stdout (zellji) run better
 3. If you have any changes please be descriptive on what is does then I will check it then merge it.
 
-``1k lines of code``
+``1.2k lines of code``
