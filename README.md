@@ -114,6 +114,7 @@ $ sudo globalssh update
 9. Make sure it does not say "unable to find redis key file" otherwise you did not put it in the right place. However you can just make a new on right there too.
 10. Enjoy Global SSH 😄
 11. Be sure to reinstall to update Global SSH
+12. To exit write ``$ client-exit``
 
 ## How Do You Use It?
 

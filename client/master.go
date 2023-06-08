@@ -17,7 +17,7 @@ func Run(host string) {
 	}
 	log.Printf("Connecting to %s\n", Net.HostName)
 	go Net.SetSize()
-	go signalHandler(Net)
+	//go signalHandler(Net)
 	go display(Net)
 	input(Net)
 }
@@ -44,6 +44,7 @@ func input(Net net.Net) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Println("Starting Getting Input, Write {$ client-exit} to exit")
 	var specialCommandData string
 	worker := make(chan string, net.ImportantWorkerLimit)
 	go Net.SenderWorker(worker, net.Command)

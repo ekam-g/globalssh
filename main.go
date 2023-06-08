@@ -48,9 +48,12 @@ import (
 	"globalssh/server"
 )
 
+const title = "_______________       ______          ______       ______________________  __\n__  ____/___  /______ ___  /_ ______ ____  /       __  ___/__  ___/___  / / /\n_  / __  __  / _  __ \\__  __ \\_  __ `/__  /        _____ \\ _____ \\ __  /_/ / \n/ /_/ /  _  /  / /_/ /_  /_/ // /_/ / _  /         ____/ / ____/ / _  __  /  \n\\____/   /_/   \\____/ /_.___/ \\__,_/  /_/          /____/  /____/  /_/ /_/   \n                                                                             "
+
 const help = "\nExample 'globalssh client', 'globalssh client {servername}', 'globalssh server', 'globalssh update'"
 
 func main() {
+	fmt.Println(title)
 	if !(len(os.Args) >= 2) {
 		fmt.Println("Please give an arg like client or server or update" + help)
 		os.Exit(1)

@@ -103,6 +103,7 @@ func userReader(pty *os.File) {
 	}
 	worker := make(chan string, net.LimitedWorkerLimit)
 	go writerWorker(worker, pty)
+	log.Println("Starting Getting Input, Write {$ client-exit} to exit")
 	for {
 		b := make([]byte, 1)
 		_, err = os.Stdin.Read(b)
