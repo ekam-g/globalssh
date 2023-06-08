@@ -34,7 +34,7 @@ func Init(HostMode bool, name string) (Net, string) {
 		paddedKey := padKey([]byte(key.Key))
 		key, err := aes.NewCipher(paddedKey)
 		if err != nil {
-			log.Fatal("Failed To Create Encription Key, Please fix it: ", err)
+			log.Fatal("Failed To Create Encryption Key, Please fix it: ", err)
 		}
 		EncryptionKey = key
 	} else {

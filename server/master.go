@@ -41,14 +41,17 @@ func Start() {
 		go userReader(shellPty)
 	}
 	go reader(shellPty, Net, tty)
-	command(shellPty, Net)
+	command(shellPty, Net, tty)
 }
 
-func command(pty *os.File, Net net.Net) {
+func command(pty *os.File, Net net.Net, tty bool) {
 	setData := make(chan string, net.LimitedWorkerLimit)
 	go writerWorker(setData, pty)
 	for {
 		input := Net.AwaitData(net.Command)
+		if !tty {
+			log.Printf("Recived %s", input)
+		}
 		if net.CheckGetSize(input, pty) {
 			continue
 		}
@@ -60,7 +63,6 @@ func writerWorker(setData chan string, pty *os.File) {
 	for {
 		input := net.BulkData(setData)
 		_, err := pty.Write([]byte(input))
-
 		if err != nil {
 			log.Println(err)
 		}
