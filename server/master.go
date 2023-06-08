@@ -2,7 +2,6 @@ package server
 
 import (
 	"errors"
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -71,6 +70,11 @@ func writerWorker(setData chan string, pty *os.File) {
 
 func reader(pty *os.File, Net net.Net, tty bool) {
 	worker := make(chan string, net.ImportantWorkerLimit)
+	var display chan string
+	if tty {
+		display = make(chan string, net.LimitedWorkerLimit)
+		go client.DisplayWorker(display)
+	}
 	go Net.SenderWorker(worker, net.Result)
 	for {
 		buf := make([]byte, 1024)
@@ -92,7 +96,7 @@ func reader(pty *os.File, Net net.Net, tty bool) {
 		if !tty {
 			continue
 		}
-		fmt.Print(string(buf[:n]))
+		display <- string(buf[:n])
 	}
 }
 

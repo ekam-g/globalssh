@@ -24,14 +24,14 @@ func Run(host string) {
 
 func display(Net net.Net) {
 	display := make(chan string, net.LimitedWorkerLimit)
-	go displayWorker(display)
+	go DisplayWorker(display)
 	for {
 		data := Net.AwaitData(net.Result)
 		display <- data
 	}
 }
 
-func displayWorker(data chan string) {
+func DisplayWorker(data chan string) {
 	for {
 		display := net.BulkData(data)
 		fmt.Print(display)
