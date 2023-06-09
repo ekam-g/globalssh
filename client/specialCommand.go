@@ -3,6 +3,7 @@ package client
 import (
 	"fmt"
 	"globalssh/net"
+	"io"
 	"log"
 	"os"
 	"strings"
@@ -38,6 +39,7 @@ func exit(input string, fd int, oldState *term.State, Net net.Net) bool {
 	if strings.Contains(input, "client-exit") {
 		termClean(fd, oldState)
 		Net.Close()
+		log.SetOutput(io.Discard)
 		fmt.Println("\nExiting Global SSH, Goodbye!")
 		os.Exit(0)
 	}
