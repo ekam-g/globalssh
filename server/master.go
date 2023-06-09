@@ -16,7 +16,6 @@ import (
 	"github.com/mattn/go-isatty"
 
 	"github.com/creack/pty"
-	"golang.org/x/term"
 )
 
 func Start() {
@@ -38,7 +37,9 @@ func Start() {
 		log.Println("Starting Share Mode(Found TTY terminal)")
 		tty = true
 		go net.SetLocalSize(shellPty)
-		go userReader(shellPty)
+		worker := make(chan string, net.LimitedWorkerLimit)
+		go writerWorker(worker, shellPty)
+		go client.Input(Net, worker)
 	}
 	go reader(shellPty, Net, tty)
 	command(shellPty, Net)
@@ -92,32 +93,4 @@ func reader(pty *os.File, Net net.Net, tty bool) {
 		}
 		fmt.Print(string(buf[:n]))
 	}
-}
-
-func userReader(pty *os.File) {
-	var specialCommandData string
-	fd := int(os.Stdin.Fd())
-	oldState, err := term.MakeRaw(fd)
-	if err != nil {
-		log.Fatal(err)
-	}
-	worker := make(chan string, net.LimitedWorkerLimit)
-	go writerWorker(worker, pty)
-	for {
-		b := make([]byte, 1)
-		_, err = os.Stdin.Read(b)
-		if err != nil {
-			log.Println(err)
-		}
-		input := string(b[0])
-		if input == "" {
-			continue
-		}
-		specialCommandData = client.StoreSpecialCommandData(specialCommandData, input)
-		if client.HandleSpecialCommands(specialCommandData, fd, oldState) {
-			continue
-		}
-		worker <- input
-	}
-
 }

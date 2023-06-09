@@ -19,7 +19,9 @@ func Run(host string) {
 	go Net.SetSize()
 	go signalHandler(Net)
 	go display(Net)
-	input(Net)
+	worker := make(chan string, net.ImportantWorkerLimit)
+	go Net.SenderWorker(worker, net.Command)
+	Input(Net, worker)
 }
 
 func display(Net net.Net) {
@@ -38,15 +40,13 @@ func displayWorker(data chan string) {
 	}
 }
 
-func input(Net net.Net) {
+func Input(Net net.Net, worker chan string) {
 	fd := int(os.Stdin.Fd())
 	oldState, err := term.MakeRaw(fd)
 	if err != nil {
 		log.Fatal(err)
 	}
 	var specialCommandData string
-	worker := make(chan string, net.ImportantWorkerLimit)
-	go Net.SenderWorker(worker, net.Command)
 	for {
 		b := make([]byte, 1)
 		_, err = os.Stdin.Read(b)
