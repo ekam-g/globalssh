@@ -34,7 +34,7 @@ func Init(HostMode bool, name string) (Net, string) {
 		paddedKey := padKey([]byte(key.Key))
 		key, err := aes.NewCipher(paddedKey)
 		if err != nil {
-			log.Fatal("Failed To Create Encription Key, Please fix it: ", err)
+			log.Fatal("Failed To Create Encryption Key, Please fix it: ", err)
 		}
 		EncryptionKey = key
 	} else {
@@ -52,7 +52,7 @@ func Init(HostMode bool, name string) (Net, string) {
 	if HostMode {
 		err = net.Send("Server Is On", false)
 	} else {
-		err = net.Send("neofetch\n", true)
+		err = net.Send("\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7fneofetch\n", true)
 	}
 	if err != nil {
 		log.Println("Failed To Make Redis Connection, Please Review Your Config And Wifi.\nAdvanced Error Details:", err)

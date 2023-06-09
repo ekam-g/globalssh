@@ -17,7 +17,7 @@ func Run(host string) {
 	}
 	log.Printf("Connecting to %s\n", Net.HostName)
 	go Net.SetSize()
-	go signalHandler(Net)
+	//go signalHandler(Net)
 	go display(Net)
 	worker := make(chan string, net.ImportantWorkerLimit)
 	go Net.SenderWorker(worker, net.Command)
@@ -26,14 +26,14 @@ func Run(host string) {
 
 func display(Net net.Net) {
 	display := make(chan string, net.LimitedWorkerLimit)
-	go displayWorker(display)
+	go DisplayWorker(display)
 	for {
 		data := Net.AwaitData(net.Result)
 		display <- data
 	}
 }
 
-func displayWorker(data chan string) {
+func DisplayWorker(data chan string) {
 	for {
 		display := net.BulkData(data)
 		fmt.Print(display)
@@ -46,6 +46,7 @@ func Input(Net net.Net, worker chan string) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Println("Starting Getting Input, Write {$ client-exit} to exit")
 	var specialCommandData string
 	for {
 		b := make([]byte, 1)

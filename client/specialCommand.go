@@ -13,11 +13,24 @@ import (
 	"golang.org/x/term"
 )
 
+const Kill = "\x03"
+
+const BackSpace = "\x7f"
+
 func HandleSpecialCommands(input string, fd int, oldState *term.State) bool {
 	return exit(input, fd, oldState)
 }
 
 func StoreSpecialCommandData(currentData string, input string) string {
+	if len(currentData) > 100 {
+		return ""
+	}
+	if input == BackSpace {
+		if len(currentData) == 0 {
+			return currentData
+		}
+		return currentData[:len(currentData)-1]
+	}
 	if input == " " || input == "\n" {
 		return ""
 	}
@@ -48,7 +61,8 @@ func sigtermHandler(amountSingled int, Net net.Net) int {
 		fmt.Println("To Exit Global_SSH Please Do {client-exit}")
 		return 0
 	}
-	err := Net.Send("\x03", true)
+	//Kill command
+	err := Net.Send(Kill, true)
 	if err != nil {
 		log.Println("Failed To Send Redis Data due to: ", err)
 	}
