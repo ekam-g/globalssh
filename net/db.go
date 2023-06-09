@@ -3,6 +3,7 @@ package net
 import (
 	"crypto/aes"
 	"crypto/cipher"
+	"io"
 	"log"
 
 	"github.com/redis/go-redis/v9"
@@ -19,6 +20,7 @@ type Net struct {
 
 func (net Net) Close() {
 	//Kill command
+	log.SetOutput(io.Discard)
 	_ = net.ResultStream.Close()
 	_ = net.CommandStream.Close()
 	_ = net.Client.Close()
