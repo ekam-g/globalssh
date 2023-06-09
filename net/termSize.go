@@ -1,11 +1,12 @@
 package net
 
 import (
-	speedJson "github.com/json-iterator/go"
 	"log"
 	"os"
 	"strings"
 	"time"
+
+	speedJson "github.com/json-iterator/go"
 
 	"github.com/creack/pty"
 	"golang.org/x/term"
@@ -21,7 +22,7 @@ type TermSize struct {
 func (net Net) SetSize() {
 	oldSize := TermSize{}
 	for {
-		time.Sleep(time.Second * 5)
+		time.Sleep(time.Second * 3)
 		width, length, err := term.GetSize(int(os.Stdin.Fd()))
 		if err != nil {
 			log.Println("Failed to Get Size of Terminal due to: ", err)
@@ -32,7 +33,7 @@ func (net Net) SetSize() {
 			Length: uint16(length),
 		}
 		if termSize == oldSize {
-			time.Sleep(time.Second * 10)
+			continue
 		}
 		oldSize = termSize
 		sendData, err := speedJson.ConfigCompatibleWithStandardLibrary.Marshal(termSize)
