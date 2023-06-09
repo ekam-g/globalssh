@@ -36,9 +36,9 @@ func StoreSpecialCommandData(currentData string, input string) string {
 
 func exit(input string, fd int, oldState *term.State, Net net.Net) bool {
 	if strings.Contains(input, "client-exit") {
-		fmt.Println("\nExiting Global SSH, Goodbye!")
 		termClean(fd, oldState)
 		Net.Close()
+		fmt.Println("\nExiting Global SSH, Goodbye!")
 		os.Exit(0)
 	}
 	return false
