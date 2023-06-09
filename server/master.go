@@ -108,6 +108,7 @@ func signalHandler(Net net.Net) {
 	c := make(chan os.Signal)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	<-c
+	_ = Net.Send("Globalssh: Server Is Shutting Down(recived control - c)", net.Result)
 	Net.Close()
 	os.Exit(0)
 }

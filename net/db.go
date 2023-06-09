@@ -19,7 +19,6 @@ type Net struct {
 
 func (net Net) Close() {
 	//Kill command
-	_ = net.Send("Globalssh: Server Is Shutting Down(recived control - c)", Result)
 	_ = net.ResultStream.Close()
 	_ = net.CommandStream.Close()
 	_ = net.Client.Close()

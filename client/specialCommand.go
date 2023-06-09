@@ -37,16 +37,16 @@ func StoreSpecialCommandData(currentData string, input string) string {
 func exit(input string, fd int, oldState *term.State, Net net.Net) bool {
 	if strings.Contains(input, "client-exit") {
 		fmt.Println("\nExiting Global SSH, Goodbye!")
+		termClean(fd, oldState)
 		Net.Close()
-		os.Exit(termClean(fd, oldState))
+		os.Exit(0)
 	}
 	return false
 }
 
-func termClean(fd int, oldState *term.State) int {
+func termClean(fd int, oldState *term.State) {
 	err := term.Restore(fd, oldState)
 	if err != nil {
 		log.Fatal("Failed To Restore Terminal due to: ", err)
 	}
-	return 0
 }
