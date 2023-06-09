@@ -100,35 +100,3 @@ func reader(pty *os.File, Net net.Net, tty bool) {
 		display <- string(buf[:n])
 	}
 }
-<<<<<<< HEAD
-=======
-
-func userReader(pty *os.File) {
-	var specialCommandData string
-	fd := int(os.Stdin.Fd())
-	oldState, err := term.MakeRaw(fd)
-	if err != nil {
-		log.Fatal(err)
-	}
-	worker := make(chan string, net.LimitedWorkerLimit)
-	go writerWorker(worker, pty)
-	log.Println("Starting Getting Input, Write {$ client-exit} to exit")
-	for {
-		b := make([]byte, 1)
-		_, err = os.Stdin.Read(b)
-		if err != nil {
-			log.Println(err)
-		}
-		input := string(b[0])
-		if input == "" {
-			continue
-		}
-		specialCommandData = client.StoreSpecialCommandData(specialCommandData, input)
-		if client.HandleSpecialCommands(specialCommandData, fd, oldState) {
-			continue
-		}
-		worker <- input
-	}
-
-}
->>>>>>> a2355fb136992e929e6b4174cb289899ba45a3d0
