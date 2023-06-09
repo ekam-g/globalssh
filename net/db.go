@@ -17,6 +17,14 @@ type Net struct {
 	EncryptionKey cipher.Block
 }
 
+func (net Net) Close() {
+	//Kill command
+	_ = net.Send("Globalssh: Server Is Shutting Down(recived control - c)", Result)
+	_ = net.ResultStream.Close()
+	_ = net.CommandStream.Close()
+	_ = net.Client.Close()
+}
+
 func Init(HostMode bool, name string) (Net, string) {
 	key := GetKey()
 	if name != "" {

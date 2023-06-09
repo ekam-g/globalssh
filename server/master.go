@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"os/signal"
 	"syscall"
 	"time"
 
@@ -39,6 +40,8 @@ func Start() {
 		worker := make(chan string, net.LimitedWorkerLimit)
 		go writerWorker(worker, shellPty)
 		go client.Input(Net, worker)
+	} else {
+		go signalHandler(Net)
 	}
 	go reader(shellPty, Net, tty)
 	command(shellPty, Net, tty)
@@ -100,3 +103,21 @@ func reader(pty *os.File, Net net.Net, tty bool) {
 		display <- string(buf[:n])
 	}
 }
+
+func signalHandler(Net net.Net) {
+	c := make(chan os.Signal)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	<-c
+	Net.Close()
+	os.Exit(0)
+}
+
+// Implementation of file logger will come later.. I'm unsure of this change....
+// func fileLogger() *os.File {
+// 	file, err := os.OpenFile("globalssh.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+// 	if err != nil {
+// 		log.Println("Failed to open log file:", err)
+// 	}
+// 	log.SetOutput(file)
+// 	return file
+// }

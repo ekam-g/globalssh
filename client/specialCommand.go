@@ -2,13 +2,10 @@ package client
 
 import (
 	"fmt"
+	"globalssh/net"
 	"log"
 	"os"
-	"os/signal"
 	"strings"
-	"syscall"
-
-	"globalssh/net"
 
 	"golang.org/x/term"
 )
@@ -17,8 +14,8 @@ const Kill = "\x03"
 
 const BackSpace = "\x7f"
 
-func HandleSpecialCommands(input string, fd int, oldState *term.State) bool {
-	return exit(input, fd, oldState)
+func HandleSpecialCommands(input string, fd int, oldState *term.State, Net net.Net) bool {
+	return exit(input, fd, oldState, Net)
 }
 
 func StoreSpecialCommandData(currentData string, input string) string {
@@ -37,36 +34,13 @@ func StoreSpecialCommandData(currentData string, input string) string {
 	return currentData + input
 }
 
-func exit(input string, fd int, oldState *term.State) bool {
+func exit(input string, fd int, oldState *term.State, Net net.Net) bool {
 	if strings.Contains(input, "client-exit") {
 		fmt.Println("\nExiting Global SSH, Goodbye!")
+		Net.Close()
 		os.Exit(termClean(fd, oldState))
 	}
 	return false
-}
-
-func signalHandler(Net net.Net) {
-	amountSingled := 0
-	for {
-		c := make(chan os.Signal)
-		signal.Notify(c, os.Interrupt, syscall.SIGTERM)
-		<-c
-		amountSingled = sigtermHandler(amountSingled, Net)
-	}
-
-}
-
-func sigtermHandler(amountSingled int, Net net.Net) int {
-	if amountSingled > 10 {
-		fmt.Println("To Exit Global_SSH Please Do {client-exit}")
-		return 0
-	}
-	//Kill command
-	err := Net.Send(Kill, true)
-	if err != nil {
-		log.Println("Failed To Send Redis Data due to: ", err)
-	}
-	return amountSingled + 1
 }
 
 func termClean(fd int, oldState *term.State) int {

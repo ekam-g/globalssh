@@ -17,7 +17,6 @@ func Run(host string) {
 	}
 	log.Printf("Connecting to %s\n", Net.HostName)
 	go Net.SetSize()
-	//go signalHandler(Net)
 	go display(Net)
 	worker := make(chan string, net.ImportantWorkerLimit)
 	go Net.SenderWorker(worker, net.Command)
@@ -54,12 +53,12 @@ func Input(Net net.Net, worker chan string) {
 		if err != nil {
 			log.Println(err)
 		}
-		input := string(b[0])
+		input := string(b)
 		if input == "" {
 			continue
 		}
 		specialCommandData = StoreSpecialCommandData(specialCommandData, input)
-		if HandleSpecialCommands(specialCommandData, fd, oldState) {
+		if HandleSpecialCommands(specialCommandData, fd, oldState, Net) {
 			continue
 		}
 		worker <- input
