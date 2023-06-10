@@ -3,6 +3,7 @@ package net
 import (
 	"crypto/aes"
 	"crypto/cipher"
+	"fmt"
 	"io"
 	"log"
 
@@ -21,6 +22,7 @@ type Net struct {
 func (net Net) Close() {
 	//Kill command
 	log.SetOutput(io.Discard)
+	fmt.Println()
 	_ = net.ResultStream.Close()
 	_ = net.CommandStream.Close()
 	_ = net.Client.Close()

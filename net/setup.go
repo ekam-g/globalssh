@@ -2,13 +2,14 @@ package net
 
 import (
 	"fmt"
-	speedJson "github.com/json-iterator/go"
-	"github.com/mattn/go-isatty"
 	"log"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	speedJson "github.com/json-iterator/go"
+	"github.com/mattn/go-isatty"
 )
 
 const (
