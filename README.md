@@ -13,7 +13,7 @@
 
 ![](assets/display.gif)
 
-## Why Should I Use It?
+## What Is The Problem With SSH?
 
 SSH can be difficult to set up and maintain, requiring software installation and configuration on both local and remote systems, as well as firewall and access control configuration. Global SSH removes this complexity, making it accessible to non-technical users.
 
