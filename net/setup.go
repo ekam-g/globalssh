@@ -42,7 +42,7 @@ func GetKey() Key {
 }
 
 func newKey() Key {
-	if !isatty.IsTerminal(os.Stdout.Fd()) || !isatty.IsCygwinTerminal(os.Stdout.Fd()) {
+	if !isatty.IsTerminal(os.Stdout.Fd()) && !isatty.IsCygwinTerminal(os.Stdout.Fd()) {
 		log.Fatal("Please set Redis key/create redis key json, exiting(non-tty term)")
 	}
 	file, err := tryCreate()
