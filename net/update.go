@@ -2,13 +2,14 @@ package net
 
 import (
 	"fmt"
-	"github.com/creack/pty"
-	"golang.org/x/term"
 	"io"
 	"log"
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/creack/pty"
+	"golang.org/x/term"
 )
 
 func Update() {
@@ -26,20 +27,20 @@ func Update() {
 	shellCode := [1]string{"bash <( curl -s https://raw.githubusercontent.com/carghai/globalssh/main/install.sh)\n"}
 	shellPty, err := pty.Start(exec.Command("bash"))
 	if err != nil {
-		log.Printf("Failed to update due to a pty failure: %s\n", err)
+		log.Fatalf("Failed to update due to a pty failure: %s\n", err)
 	}
 	go func() {
 		for _, x := range shellCode {
 			_, err = shellPty.Write([]byte(x))
 			if err != nil {
-				log.Printf("Failed to update due to unable to write to pty: %s\n", err)
+				log.Fatalf("Failed to update due to unable to write to pty: %s\n", err)
 			}
 		}
 	}()
 	go func() {
 		_, err := io.Copy(shellPty, os.Stdin)
 		if err != nil {
-			log.Printf("Failed to copy Stdin: %s\n", err)
+			log.Fatalf("Failed to copy Stdin: %s\n", err)
 		}
 	}()
 	fmt.Println("----Start Stdout----")

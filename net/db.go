@@ -61,9 +61,9 @@ func Init(HostMode bool, name string) (Net, string) {
 	}
 	var err error
 	if HostMode {
-		err = net.Send("Server Is On", false)
+		err = net.Send("Server Is On", Result)
 	} else {
-		err = net.Send("\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\n", true)
+		err = net.Send("\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\n", Command)
 	}
 	if err != nil {
 		log.Println("Failed To Make Redis Connection, Please Review Your Config And Wifi.\nAdvanced Error Details:", err)
