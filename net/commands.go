@@ -2,7 +2,7 @@ package net
 
 import (
 	"context"
-	"fmt"
+	"log"
 
 	"github.com/redis/go-redis/v9"
 )
@@ -61,6 +61,6 @@ func (net Net) AwaitData(commandVersion bool) string {
 		if err == nil {
 			return data
 		}
-		fmt.Println(err)
+		log.Println(err)
 	}
 }
