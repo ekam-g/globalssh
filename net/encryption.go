@@ -7,7 +7,10 @@ import (
 	"crypto/rand"
 	"errors"
 	"io"
+	"log"
 )
+
+const DecryptError = "decrypt Failed, invalid key"
 
 func (net Net) encrypt(text string) (string, error) {
 	if net.EncryptionKey == nil {
@@ -74,7 +77,7 @@ func pad(data []byte, blockSize int) []byte {
 func unpad(data []byte) ([]byte, error) {
 	padding := int(data[len(data)-1])
 	if padding > len(data) {
-		return nil, errors.New("decrypt Failed, invalid key")
+		return nil, errors.New(DecryptError)
 	}
 	return data[:len(data)-padding], nil
 }
@@ -84,4 +87,19 @@ func padKey(key []byte) []byte {
 	paddedKey := make([]byte, 32)
 	copy(paddedKey, key)
 	return paddedKey
+}
+
+func NewKey(key string) cipher.Block {
+	var EncryptionKey cipher.Block
+	if key != "" {
+		paddedKey := padKey([]byte(key))
+		key, err := aes.NewCipher(paddedKey)
+		if err != nil {
+			log.Fatal("Failed To Create Encryption Key, Please fix it: ", err)
+		}
+		EncryptionKey = key
+	} else {
+		EncryptionKey = nil
+	}
+	return EncryptionKey
 }

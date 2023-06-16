@@ -1,7 +1,6 @@
 package net
 
 import (
-	"crypto/aes"
 	"crypto/cipher"
 	"fmt"
 	"io"
@@ -40,17 +39,7 @@ func Init(HostMode bool, name string) (Net, string) {
 		DB:       int(key.DB),
 	})
 	commandStream, resultStream := GetConnection(client, key.HostName)
-	var EncryptionKey cipher.Block
-	if key.Key != "" {
-		paddedKey := padKey([]byte(key.Key))
-		key, err := aes.NewCipher(paddedKey)
-		if err != nil {
-			log.Fatal("Failed To Create Encryption Key, Please fix it: ", err)
-		}
-		EncryptionKey = key
-	} else {
-		EncryptionKey = nil
-	}
+	EncryptionKey := NewKey(key.Key)
 	net := Net{
 		CommandStream: commandStream,
 		ResultStream:  resultStream,
@@ -62,8 +51,6 @@ func Init(HostMode bool, name string) (Net, string) {
 	var err error
 	if HostMode {
 		err = net.Send("Server Is On", Result)
-	} else {
-		err = net.Send("\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\n", Command)
 	}
 	if err != nil {
 		log.Println("Failed To Make Redis Connection, Please Review Your Config And Wifi.\nAdvanced Error Details:", err)

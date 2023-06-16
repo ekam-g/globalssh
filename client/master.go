@@ -2,10 +2,9 @@ package client
 
 import (
 	"fmt"
+	"globalssh/net"
 	"log"
 	"os"
-
-	"globalssh/net"
 
 	"golang.org/x/term"
 )
@@ -16,6 +15,7 @@ func Run(host string) {
 		log.Printf("The Server Computer is using: %s\n", serverShell)
 	}
 	log.Printf("Connecting to %s\n", Net.HostName)
+	checkEncryptionKey(Net)
 	go Net.SetSize()
 	go display(Net)
 	worker := make(chan string, net.ImportantWorkerLimit)

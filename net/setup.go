@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	dbKeyLocation = "redis_key.json"
+	KeyLocation = "redis_key.json"
 )
 
 type Key struct {
@@ -100,19 +100,19 @@ func GetInput(message string) string {
 }
 
 func tryRead() ([]byte, error) {
-	data, err := os.ReadFile(dbKeyLocation)
+	data, err := os.ReadFile(KeyLocation)
 	if err == nil {
 		return data, nil
 	}
 	homeDir, err := os.UserHomeDir()
 	if err == nil {
-		filePath := filepath.Join(homeDir, dbKeyLocation)
+		filePath := filepath.Join(homeDir, KeyLocation)
 		data, err := os.ReadFile(filePath)
 		if err == nil {
 			return data, nil
 		}
 	}
-	filePath := filepath.Join("C:\\\\", dbKeyLocation)
+	filePath := filepath.Join("C:\\\\", KeyLocation)
 	data, err = os.ReadFile(filePath)
 	if err == nil {
 		return data, nil
@@ -123,17 +123,17 @@ func tryRead() ([]byte, error) {
 func tryCreate() (*os.File, error) {
 	homeDir, err := os.UserHomeDir()
 	if err == nil {
-		filePath := filepath.Join(homeDir, dbKeyLocation)
+		filePath := filepath.Join(homeDir, KeyLocation)
 		data, err := os.Create(filePath)
 		if err == nil {
 			return data, nil
 		}
 	}
-	data, err := os.Create(dbKeyLocation)
+	data, err := os.Create(KeyLocation)
 	if err == nil {
 		return data, nil
 	}
-	filePath := filepath.Join("C:\\", dbKeyLocation)
+	filePath := filepath.Join("C:\\", KeyLocation)
 	data, err = os.Create(filePath)
 	if err == nil {
 		return data, nil
