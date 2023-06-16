@@ -5,6 +5,7 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
+	"errors"
 	"io"
 )
 
@@ -54,7 +55,10 @@ func (net Net) decrypt(text string) (string, error) {
 	mode.CryptBlocks(plaintext, ciphertext)
 
 	// Remove padding from the decrypted plaintext
-	plaintext = unpad(plaintext)
+	plaintext, err := unpad(plaintext)
+	if err != nil {
+		return "", err
+	}
 
 	return string(plaintext), nil
 }
@@ -67,9 +71,12 @@ func pad(data []byte, blockSize int) []byte {
 }
 
 // Remove PKCS7 padding from the input
-func unpad(data []byte) []byte {
+func unpad(data []byte) ([]byte, error) {
 	padding := int(data[len(data)-1])
-	return data[:len(data)-padding]
+	if padding > len(data) {
+		return nil, errors.New("decrypt Failed, invalid key")
+	}
+	return data[:len(data)-padding], nil
 }
 
 // Pad the key to 32 bytes
