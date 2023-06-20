@@ -30,12 +30,11 @@ func checkEncryptionKey(Net net.Net) {
 	if err != nil {
 		log.Fatalf("Failed To Send Data To Redis Exiting\n%s", err)
 	}
-	data, err := readWithTimeout(consoleData, time.Second*3)
+	data, err := readWithTimeout(consoleData, time.Second*10)
 	if err != nil {
-		log.Fatalf("Incorrect/No Reply Received From Server,\nThis May Happen If You Decryption Key is Bad Or Your Wifi Is Bad,\nLet's Try Changing Your Decryption Key in %s", net.KeyLocation)
+		log.Fatalf("Incorrect/No Reply Received From Server,\nThis May Happen If You Decryption Key is Bad Or Your Wifi Is Bad, This Can Also Happen If the Server Does Not Exist.\nAlso Try Changing Your Key File Decryption Key in %s", net.KeyLocation)
 	}
 	fmt.Print(data)
-	return
 }
 
 func readWithTimeout(ch <-chan string, timeout time.Duration) (string, error) {
