@@ -50,7 +50,7 @@ import (
 
 const title = "_______________       ______          ______       ______________________  __\n__  ____/___  /______ ___  /_ ______ ____  /       __  ___/__  ___/___  / / /\n_  / __  __  / _  __ \\__  __ \\_  __ `/__  /        _____ \\ _____ \\ __  /_/ / \n/ /_/ /  _  /  / /_/ /_  /_/ // /_/ / _  /         ____/ / ____/ / _  __  /  \n\\____/   /_/   \\____/ /_.___/ \\__,_/  /_/          /____/  /____/  /_/ /_/   \n                                                                             "
 
-const help = "\nExample 'globalssh client', 'globalssh client {servername}', 'globalssh server', 'globalssh update'"
+const help = "\nExample 'globalssh client', 'globalssh client {servername}', 'globalssh server', 'globalssh server {servername}', globalssh update'"
 
 func main() {
 	fmt.Println(title)
@@ -65,7 +65,10 @@ func main() {
 		}
 		client.Run("")
 	case "server":
-		server.Start()
+		if len(os.Args) == 3 {
+			server.Start(os.Args[2])
+		}
+		server.Start("")
 	case "update":
 		net.Update()
 	default:

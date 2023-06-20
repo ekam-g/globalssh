@@ -31,6 +31,7 @@ In summary, Global SSH offers an easier, more secure, and scalable alternative t
 5. Seamless Mode Switching: Transitioning between server and client modes is a breeze with Global SSH. By issuing simple commands in the terminal, you can easily switch between being a server or a client:
 
    * Server Mode: $ `globalssh server`
+   * Server Mode(different host name) $ `globalssh server {hostname}`
    * Client Mode: $ `globalssh client`
    * Client Mode(different host) $ `globalssh client {hostname}`
 6. No Port Forwarding Needed: Global SSH removes the requirement for port forwarding, simplifying the process of connecting hosts and clients across networks. Say goodbye to the complexities of managing port forwarding settings.

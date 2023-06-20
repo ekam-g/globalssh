@@ -18,8 +18,8 @@ import (
 	"github.com/creack/pty"
 )
 
-func Start() {
-	Net, whatShell := net.Init(true, "")
+func Start(hostname string) {
+	Net, whatShell := net.Init(true, hostname)
 	err := os.Setenv("TERM", "xterm-256color")
 	if err != nil {
 		log.Println("Failed To set Env var for TERM, commands like htop may not work properly")

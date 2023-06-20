@@ -7,6 +7,6 @@ import (
 
 func TestApp(t *testing.T) {
 	// This is used for profiling the app
-	go Start()
+	go Start("")
 	time.Sleep(time.Second * 30)
 }
