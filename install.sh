@@ -1,10 +1,12 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 cd || exit
 
 sudo rm -rf globalssh-main
 
 rm globalssh.zip
+
+sudo mkdir /usr/local/bin
 
 curl -L https://github.com/carghai/globalssh/archive/refs/heads/main.zip > globalssh.zip || exit
 
@@ -26,4 +28,4 @@ sudo rm -rf globalssh-main
 
 rm globalssh.zip
 
-echo "Welcome to Global SSH, If you are on mac it may not add to path"
+echo "Welcome to Global SSH, If you are on windows it may not add to path"
