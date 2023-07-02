@@ -57,7 +57,7 @@ func command(pty *os.File, Net net.Net, tty bool) {
 	for {
 		input := Net.AwaitData(net.Command)
 		if !tty {
-			go log.Printf("Recived %s", input)
+			log.Printf("Recived %s", input)
 		}
 		if net.CheckGetSize(input, pty) {
 			go func() {
