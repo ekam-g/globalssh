@@ -11,6 +11,8 @@ import (
 	"time"
 )
 
+const SetDisplay string = "\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\n"
+
 func checkEncryptionKey(Net net.Net) {
 	consoleData := make(chan string)
 	go func() {
@@ -26,7 +28,7 @@ func checkEncryptionKey(Net net.Net) {
 		consoleData <- data
 	}()
 	time.Sleep(time.Millisecond * 20)
-	err := Net.Send("\n", net.Command)
+	err := Net.Send(SetDisplay, net.Command)
 	if err != nil {
 		log.Fatalf("Failed To Send Data To Redis Exiting\n%s", err)
 	}

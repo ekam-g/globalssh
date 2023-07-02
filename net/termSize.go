@@ -1,6 +1,7 @@
 package net
 
 import (
+	"globalssh/client"
 	"log"
 	"os"
 	"strings"
@@ -89,7 +90,13 @@ func CheckGetSize(input string, ptyTerm *os.File) bool {
 func onExitLocalSize(ptyTerm *os.File, input string) bool {
 	if strings.Contains(input, exitCommand) {
 		if isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd()) {
-			go SetLocalSize(ptyTerm)
+			go func() {
+				SetLocalSize(ptyTerm)
+				_, err := ptyTerm.Write([]byte(client.SetDisplay))
+				if err != nil {
+					log.Println("Failed To Write Data Due To, ", err)
+				}
+			}()
 		}
 		log.Println("\nClient Has Exited")
 		return true
