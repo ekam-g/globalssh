@@ -61,7 +61,7 @@ func (net Net) SetSize() {
 // CheckGetSize returns true if command is run
 func CheckGetSize(input string, ptyTerm *os.File) bool {
 	//exit on successful command
-	if !onExitLocalSize(ptyTerm, input) {
+	if onExitLocalSize(ptyTerm, input) {
 		return true
 	}
 	if !strings.Contains(input, termCommand) {
