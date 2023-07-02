@@ -2,20 +2,19 @@ package server
 
 import (
 	"errors"
+	"globalssh/client"
+	"globalssh/net"
 	"io"
 	"log"
 	"os"
 	"os/exec"
 	"os/signal"
+	"sync"
 	"syscall"
 	"time"
 
-	"globalssh/client"
-	"globalssh/net"
-
-	"github.com/mattn/go-isatty"
-
 	"github.com/creack/pty"
+	"github.com/mattn/go-isatty"
 )
 
 func Start(hostname string) {
@@ -50,12 +49,20 @@ func Start(hostname string) {
 func command(pty *os.File, Net net.Net, tty bool) {
 	setData := make(chan string, net.LimitedWorkerLimit)
 	go writerWorker(setData, pty)
+	timeMx := sync.Mutex{}
+	sizeSetTime := time.Now()
+	if tty {
+		go net.SizeAgent(&timeMx, &sizeSetTime, pty)
+	}
 	for {
 		input := Net.AwaitData(net.Command)
 		if !tty {
-			log.Printf("Recived %s", input)
+			go log.Printf("Recived %s", input)
 		}
 		if net.CheckGetSize(input, pty) {
+			if tty {
+				sizeSetTime = time.Now()
+			}
 			continue
 		}
 		setData <- input

@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/creack/pty"
@@ -15,6 +16,8 @@ import (
 
 const resendTime uint8 = 30
 
+const timeOutTime uint8 = 60
+
 const termCommand string = "&%#$&^!@%#$^KJH#G$@#$"
 
 const exitCommand string = "$KU%JGH#@K$JH%$UYGT%O@&#$T%@J#H$%GOUYFRO*@$%JHLOV@#KHB$%CHKG$#F%JKL@H#$B%JKGC@$#L%IUJHG@#$&(*%@JLNB$V%GC"
@@ -22,6 +25,17 @@ const exitCommand string = "$KU%JGH#@K$JH%$UYGT%O@&#$T%@J#H$%GOUYFRO*@$%JHLOV@#K
 type TermSize struct {
 	Width  uint16
 	Length uint16
+}
+
+func SizeAgent(mutex *sync.Mutex, duration *time.Time, ptyTerm *os.File) {
+	for {
+		time.Sleep(time.Second * 5)
+		mutex.Lock()
+		if uint8(time.Since(*duration).Seconds()) > timeOutTime {
+			SetLocalSize(ptyTerm)
+		}
+		mutex.Unlock()
+	}
 }
 
 func (net Net) SetSize() {
