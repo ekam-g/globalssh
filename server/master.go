@@ -61,7 +61,9 @@ func command(pty *os.File, Net net.Net, tty bool) {
 		}
 		if net.CheckGetSize(input, pty) {
 			if tty {
+				timeMx.Lock()
 				sizeSetTime = time.Now()
+				timeMx.Unlock()
 			}
 			continue
 		}
