@@ -1,7 +1,6 @@
 package net
 
 import (
-	"globalssh/client"
 	"log"
 	"os"
 	"strings"
@@ -13,6 +12,8 @@ import (
 	"github.com/mattn/go-isatty"
 	"golang.org/x/term"
 )
+
+const SetDisplay string = "\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\x7f\n"
 
 const resendTime uint8 = 30
 
@@ -106,7 +107,7 @@ func onExitLocalSize(ptyTerm *os.File, input string) bool {
 		if isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd()) {
 			go func() {
 				SetLocalSize(ptyTerm)
-				_, err := ptyTerm.Write([]byte(client.SetDisplay))
+				_, err := ptyTerm.Write([]byte(SetDisplay))
 				if err != nil {
 					log.Println("Failed To Write Data Due To, ", err)
 				}
