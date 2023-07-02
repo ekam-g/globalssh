@@ -6,11 +6,12 @@ import (
 	"strings"
 	"time"
 
-	speedJson "github.com/json-iterator/go"
-
 	"github.com/creack/pty"
+	speedJson "github.com/json-iterator/go"
 	"golang.org/x/term"
 )
+
+const resendTime uint8 = 30
 
 const termCommand string = "&%#$&^!@%#$^KJH#G$@#$"
 
@@ -21,8 +22,10 @@ type TermSize struct {
 
 func (net Net) SetSize() {
 	oldSize := TermSize{}
+	var amountTried uint8 = 0
+	time.Sleep(time.Second * 3)
 	for {
-		time.Sleep(time.Second * 3)
+		time.Sleep(time.Second * 1)
 		width, length, err := term.GetSize(int(os.Stdin.Fd()))
 		if err != nil {
 			log.Println("Failed to Get Size of Terminal due to: ", err)
@@ -33,7 +36,12 @@ func (net Net) SetSize() {
 			Length: uint16(length),
 		}
 		if termSize == oldSize {
-			continue
+			if amountTried >= resendTime {
+				amountTried = 0
+			} else {
+				amountTried++
+				continue
+			}
 		}
 		oldSize = termSize
 		sendData, err := speedJson.ConfigCompatibleWithStandardLibrary.Marshal(termSize)
