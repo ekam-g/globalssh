@@ -8,12 +8,15 @@ import (
 
 	"github.com/creack/pty"
 	speedJson "github.com/json-iterator/go"
+	"github.com/mattn/go-isatty"
 	"golang.org/x/term"
 )
 
 const resendTime uint8 = 30
 
 const termCommand string = "&%#$&^!@%#$^KJH#G$@#$"
+
+const exitCommand string = "$KU%JGH#@K$JH%$UYGT%O@&#$T%@J#H$%GOUYFRO*@$%JHLOV@#KHB$%CHKG$#F%JKL@H#$B%JKGC@$#L%IUJHG@#$&(*%@JLNB$V%GC"
 
 type TermSize struct {
 	Width  uint16
@@ -55,7 +58,12 @@ func (net Net) SetSize() {
 	}
 }
 
+// CheckGetSize returns true if command is run
 func CheckGetSize(input string, ptyTerm *os.File) bool {
+	//exit on successful command
+	if !onExitLocalSize(ptyTerm, input) {
+		return true
+	}
 	if !strings.Contains(input, termCommand) {
 		return false
 	}
@@ -75,6 +83,25 @@ func CheckGetSize(input string, ptyTerm *os.File) bool {
 		log.Println("Failed to Resize Window Due to: ", err)
 	}
 	return true
+}
+
+// onExitLocalSize returns true if command is run
+func onExitLocalSize(ptyTerm *os.File, input string) bool {
+	if strings.Contains(input, exitCommand) {
+		if isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd()) {
+			go SetLocalSize(ptyTerm)
+		}
+		log.Println("\nClient Has Exited")
+		return true
+	}
+	return false
+}
+
+func (net Net) ExitSizeSet() {
+	err := net.Send(exitCommand, Command)
+	if err != nil {
+		log.Println("Failed To Send Due To: ", err)
+	}
 }
 
 func SetLocalSize(ptyTerm *os.File) {
