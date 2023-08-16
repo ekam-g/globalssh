@@ -53,8 +53,8 @@ const title = "_______________       ______          ______       ______________
 const help = "\nExample 'globalssh client', 'globalssh client {servername}', 'globalssh server', 'globalssh server {servername}', globalssh update'"
 
 func main() {
-	fmt.Println(title)
 	if !(len(os.Args) >= 2) {
+		fmt.Println(title)
 		fmt.Println("Please give an arg like client or server or update" + help)
 		os.Exit(1)
 	}
@@ -74,6 +74,7 @@ func main() {
 	case "update":
 		net.Update()
 	default:
+		fmt.Println(title)
 		fmt.Println("Bad Arg Given, Please Put in server or client or update" + help)
 		os.Exit(1)
 
