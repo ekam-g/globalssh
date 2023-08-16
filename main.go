@@ -62,6 +62,8 @@ func main() {
 	case "client":
 		if len(os.Args) == 5 {
 			client.CommandSend(os.Args[2], os.Args[3], os.Args[4])
+		} else if len(os.Args) == 4 {
+			client.CommandSend(os.Args[2], os.Args[3], "0")
 		} else if len(os.Args) == 3 {
 			client.Run(os.Args[2])
 		}
