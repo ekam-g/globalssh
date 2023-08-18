@@ -123,6 +123,18 @@ $ sudo globalssh update
 2. To connect to your server make sure you have the same redis_key.json in the ~ location and run ``globalssh client`` if you did everything right, you should see a neofetch command go off when you connect to your server. You can now type in commands, just note what every you type can be seen on the server computer. 
 3. If you want to connect to other servers you can run ``globalssh client {server name}``
 
+## How to use it for automation?
+1. ``globalssh client {server-name} {time-delay-for-output} {input}``
+2. for example if I want to redeploy a project I can do this 
+3. ``globalssh client test 20 ./redeploy.sh\n``
+4. It gives the raw output of the shell
+5. You can even update your system and use sudo! 
+````
+  globalssh client test 8 "sudo dnf update\n"
+  globalssh client test 8 "mysudopassword\n"
+  globalssh client test 8 "y\n\n"
+````
+
 # Limitations 😕
 
 1. This project is very new and it still in early alpha so please report any bugs!
