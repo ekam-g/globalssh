@@ -1,7 +1,6 @@
 package net
 
 import (
-	"crypto/cipher"
 	"fmt"
 	"io"
 	"log"
@@ -15,7 +14,7 @@ type Net struct {
 	CommandStream *redis.PubSub
 	ResultStream  *redis.PubSub
 	Client        *redis.Client
-	EncryptionKey cipher.Block
+	EncryptionKey []byte
 }
 
 func (net Net) Close() {
@@ -54,8 +53,6 @@ func Init(HostMode bool, name string) (Net, string) {
 	}
 	if err != nil {
 		log.Println("Failed To Make Redis Connection, Please Review Your Config And Wifi.\nAdvanced Error Details:", err)
-	} else {
-		log.Println("Redis Connection Verified And Working, Starting Global SSH!")
 	}
 	return net, key.Shell
 }
