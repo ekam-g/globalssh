@@ -130,9 +130,9 @@ $ sudo globalssh update
 4. It gives the raw output of the shell
 5. You can even update your system and use sudo! 
 ````
-  globalssh client test 8 "sudo dnf update\n"
-  globalssh client test 8 "mysudopassword\n"
-  globalssh client test 8 "y\n\n"
+  $ globalssh client test 8 "sudo dnf update\n"
+  $ globalssh client test 8 "mysudopassword\n"
+  $ globalssh client test 8 "y\n\n"
 ````
 
 # Limitations 😕
