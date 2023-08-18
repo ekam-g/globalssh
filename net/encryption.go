@@ -7,7 +7,6 @@ import (
 	"crypto/rand"
 	"errors"
 	"io"
-	"log"
 )
 
 const DecryptError = "decrypt Failed, invalid key"
@@ -16,26 +15,23 @@ func (net Net) encrypt(text string) (string, error) {
 	if net.EncryptionKey == nil {
 		return text, nil
 	}
-	plaintext := []byte(text)
-
-	// Generate a random initialization vector (IV)
-	iv := make([]byte, aes.BlockSize)
-	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+	block, err := aes.NewCipher(net.EncryptionKey[:])
+	if err != nil {
+		return "", err
+	}
+	gcm, err := cipher.NewGCM(block)
+	if err != nil {
 		return "", err
 	}
 
-	// Pad the plaintext to a multiple of the block size
-	paddedPlaintext := pad(plaintext, aes.BlockSize)
+	nonce := make([]byte, gcm.NonceSize())
+	_, err = io.ReadFull(rand.Reader, nonce)
+	if err != nil {
+		return "", err
+	}
 
-	// Create a new CBC mode cipher using the block and IV
-	mode := cipher.NewCBCEncrypter(net.EncryptionKey, iv)
+	return string(gcm.Seal(nonce, nonce, []byte(text), nil)), nil
 
-	// Encrypt the padded plaintext
-	ciphertext := make([]byte, len(paddedPlaintext))
-	mode.CryptBlocks(ciphertext, paddedPlaintext)
-
-	// Combine the IV and ciphertext and return the result
-	return string(append(iv, ciphertext...)), nil
 }
 
 func (net Net) decrypt(text string) (string, error) {
@@ -43,27 +39,19 @@ func (net Net) decrypt(text string) (string, error) {
 		return text, nil
 	}
 	ciphertext := []byte(text)
-
-	// Extract the IV from the ciphertext
-	iv := ciphertext[:aes.BlockSize]
-
-	// Extract the actual ciphertext
-	ciphertext = ciphertext[aes.BlockSize:]
-
-	// Create a new CBC mode cipher using the block and IV
-	mode := cipher.NewCBCDecrypter(net.EncryptionKey, iv)
-
-	// Decrypt the ciphertext
-	plaintext := make([]byte, len(ciphertext))
-	mode.CryptBlocks(plaintext, ciphertext)
-
-	// Remove padding from the decrypted plaintext
-	plaintext, err := unpad(plaintext)
+	block, err := aes.NewCipher(net.EncryptionKey[:])
 	if err != nil {
 		return "", err
 	}
-
-	return string(plaintext), nil
+	gcm, err := cipher.NewGCM(block)
+	if err != nil {
+		return "", err
+	}
+	if len(ciphertext) < gcm.NonceSize() {
+		return "", errors.New("malformed ciphertext")
+	}
+	data, err := gcm.Open(nil, ciphertext[:gcm.NonceSize()], ciphertext[gcm.NonceSize():], nil)
+	return string(data), err
 }
 
 // Pad the input to a multiple of the block size using PKCS7 padding
@@ -89,17 +77,9 @@ func padKey(key []byte) []byte {
 	return paddedKey
 }
 
-func NewKey(key string) cipher.Block {
-	var EncryptionKey cipher.Block
-	if key != "" {
-		paddedKey := padKey([]byte(key))
-		key, err := aes.NewCipher(paddedKey)
-		if err != nil {
-			log.Fatal("Failed To Create Encryption Key, Please fix it: ", err)
-		}
-		EncryptionKey = key
-	} else {
-		EncryptionKey = nil
+func NewKey(key string) []byte {
+	if key == "" {
+		return nil
 	}
-	return EncryptionKey
+	return padKey([]byte(key))
 }

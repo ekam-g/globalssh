@@ -15,7 +15,6 @@ deps:
 	go get github.com/mattn/go-isatty
 	go get github.com/json-iterator/go
 
-
 build:
 	go build -o ${BINARY_NAME} 
 	gopls check 

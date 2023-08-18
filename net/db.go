@@ -1,7 +1,6 @@
 package net
 
 import (
-	"crypto/cipher"
 	"fmt"
 	"io"
 	"log"
@@ -15,7 +14,7 @@ type Net struct {
 	CommandStream *redis.PubSub
 	ResultStream  *redis.PubSub
 	Client        *redis.Client
-	EncryptionKey cipher.Block
+	EncryptionKey []byte
 }
 
 func (net Net) Close() {
