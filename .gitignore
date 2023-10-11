@@ -26,6 +26,5 @@ go.work
 /target
 
 redis_key.json
-globalssh
 cpu.prof
 mem.prof
