@@ -1,5 +1,6 @@
 use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
-use std::sync::mpsc::channel;
+use core::time;
+use std::{sync::mpsc::channel, time::Duration, thread};
 
 fn main() {
     let pty_system = NativePtySystem::default();
@@ -30,10 +31,15 @@ fn main() {
     let mut reader = pair.master.try_clone_reader().unwrap();
     std::thread::spawn(move || {
         // Consume the output from the child
-        let mut s = String::new();
-        reader.read_to_string(&mut s).unwrap();
-        println!("output: {}", s);
-        tx.send(s).unwrap();
+        loop {
+            let mut buf = vec![];
+            reader.read(&mut buf).unwrap();
+            let s = String::from_utf8(buf).unwrap();
+            if !s.is_empty() {
+                println!("output: {}", s);
+                tx.send(s).unwrap();
+            }
+        }
     });
 
     {
