@@ -1,6 +1,6 @@
 use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
-use core::time;
-use std::{sync::mpsc::channel, time::Duration, thread};
+
+use std::{sync::mpsc::channel};
 
 fn main() {
     let pty_system = NativePtySystem::default();
@@ -15,7 +15,7 @@ fn main() {
         .unwrap();
 
 
-    let cmd = CommandBuilder::new("bash");
+    let cmd = CommandBuilder::new("zsh");
 
     let mut child = pair.slave.spawn_command(cmd).unwrap();
 
@@ -33,7 +33,7 @@ fn main() {
         // Consume the output from the child
         loop {
             let mut buf = vec![];
-            reader.read(&mut buf).unwrap();
+            reader.read_exact(&mut buf).unwrap();
             let s = String::from_utf8(buf).unwrap();
             if !s.is_empty() {
                 println!("output: {}", s);
@@ -71,8 +71,7 @@ fn main() {
             // data to the stdin of the child in a different thread.
         std::thread::spawn(move || {
             loop {
-                let to_write = "ls\n";
-                writer.write_all(to_write.as_bytes()).unwrap();
+                writeln!(writer, "ls -l\r\n").unwrap();
             }
         });
     }
