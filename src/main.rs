@@ -1,6 +1,6 @@
 use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
 
-use std::sync::mpsc::channel;
+use std::{sync::mpsc::channel, io::{BufReader, BufRead}};
 
 fn main() {
     let pty_system = NativePtySystem::default();
@@ -29,13 +29,15 @@ fn main() {
     let mut reader = pair.master.try_clone_reader().unwrap();
     std::thread::spawn(move || {
         // Consume the output from the child
-        loop {
-            let mut buf = vec![];
-            reader.read_exact(&mut buf).unwrap();
-            let s = String::from_utf8(buf).unwrap();
-            if !s.is_empty() {
-                println!("output: {}", s);
-                tx.send(s).unwrap();
+        let reader = BufReader::new(reader);
+        for line in reader.lines() {
+            match line {
+                Ok(value) => {
+                    // How can I let `do_something` know if the `value` is stdout or stderr?
+                    println!("{value}");
+                    tx.send(value).unwrap();
+                }
+                _ => break,
             }
         }
     });
