@@ -1,3 +1,5 @@
+pub mod pty;
+
 use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
 
 use std::{sync::mpsc::channel, io::{BufReader, BufRead}};
