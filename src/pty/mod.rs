@@ -10,7 +10,7 @@ use std::{
 #[derive(Debug)]
 pub struct PtyTerm {
     input: Sender<String>,
-    output: Receiver<String>,
+    output: Receiver<Result<String,std::io::Error>>,
 }
 
 impl PtyTerm {
@@ -41,14 +41,7 @@ impl PtyTerm {
             // Consume the output from the child
             let reader = BufReader::new(reader);
             for line in reader.lines() {
-                match line {
-                    Ok(value) => {
-                        // How can I let `do_something` know if the `value` is stdout or stderr?
-                        println!("{value}");
-                        tx.send(value).unwrap();
-                    }
-                    _ => break,
-                }
+                tx.send(line);
             }
         });
         return Ok(PtyTerm{
