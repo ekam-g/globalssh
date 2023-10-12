@@ -35,7 +35,7 @@ impl PtyTerm {
         // This is important because it is easy to encounter a situation
         // where read/write buffers fill and block either your process
         // or the spawned process.
-        let (tx, rx) = channel();
+        let (tx, output) = channel();
         let reader = pair.master.try_clone_reader().unwrap();
         std::thread::spawn(move || {
             // Consume the output from the child
@@ -45,8 +45,8 @@ impl PtyTerm {
             }
         });
         return Ok(PtyTerm{
-            input: tx,
-            output: rx,
+            input: todo!(),
+            output,
         });
     }
 }
