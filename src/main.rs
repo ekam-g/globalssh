@@ -1,6 +1,6 @@
 use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
 
-use std::{sync::mpsc::channel};
+use std::sync::mpsc::channel;
 
 fn main() {
     let pty_system = NativePtySystem::default();
@@ -14,11 +14,9 @@ fn main() {
         })
         .unwrap();
 
-
+    // Spawn a shell into the pty
     let cmd = CommandBuilder::new("zsh");
-
     let mut child = pair.slave.spawn_command(cmd).unwrap();
-
     // Release any handles owned by the slave: we don't need it now
     // that we've spawned the child.
     drop(pair.slave);
@@ -67,16 +65,14 @@ fn main() {
         // This example doesn't need to write anything, but if you
         // want to send data to the child, you'd set `to_write` to
         // that data and do it like this:
-            // To avoid deadlock, wrt. reading and waiting, we send
-            // data to the stdin of the child in a different thread.
-        std::thread::spawn(move || {
-            loop {
-                writeln!(writer, "ls -l\r\n").unwrap();
-            }
+        // To avoid deadlock, wrt. reading and waiting, we send
+        // data to the stdin of the child in a different thread.
+        std::thread::spawn(move || loop {
+            writeln!(writer, "ls -l\r\n").unwrap();
         });
     }
     // Wait for the child to complete
-    eprintln!("child status: {:?}", child.wait().unwrap());
+    println!("child status: {:?}", child.wait().unwrap());
 
     // Take care to drop the master after our processes are
     // done, as some platforms get unhappy if it is dropped
