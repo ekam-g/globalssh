@@ -26,7 +26,7 @@ fn main() {
     // where read/write buffers fill and block either your process
     // or the spawned process.
     let (tx, rx) = channel();
-    let mut reader = pair.master.try_clone_reader().unwrap();
+    let reader = pair.master.try_clone_reader().unwrap();
     std::thread::spawn(move || {
         // Consume the output from the child
         let reader = BufReader::new(reader);
@@ -70,7 +70,7 @@ fn main() {
         // To avoid deadlock, wrt. reading and waiting, we send
         // data to the stdin of the child in a different thread.
         std::thread::spawn(move || loop {
-            writeln!(writer, "ls -l\r\n").unwrap();
+            writeln!(writer, "ls -l\n").unwrap();
         });
     }
     // Wait for the child to complete
