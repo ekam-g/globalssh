@@ -41,7 +41,7 @@ impl PtyTerm {
             // Consume the output from the child
             let reader = BufReader::new(reader);
             for line in reader.lines() {
-                tx.send(line);
+                tx.send(line).expect("Unexpected Thread Closure, Crital Error");
             }
         });
         return Ok(PtyTerm{
