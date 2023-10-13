@@ -14,7 +14,7 @@ pub struct PtyTerm {
 }
 
 impl PtyTerm {
-    pub fn new() -> Result<Self, Error> {
+    pub fn new(term : &str) -> Result<Self, Error> {
         let pty_system = NativePtySystem::default();
         //todo: change size system soon!
         let pair = pty_system
@@ -25,7 +25,7 @@ impl PtyTerm {
                 pixel_height: 0,
             })?;
 
-        let cmd = CommandBuilder::new("zsh");
+        let cmd = CommandBuilder::new(term);
         pair.slave.spawn_command(cmd)?;
         // Release any handles owned by the slave: we don't need it now
         // that we've spawned the child.
