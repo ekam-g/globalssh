@@ -48,6 +48,7 @@ name = "globalssh"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "log",
  "portable-pty",
 ]
 

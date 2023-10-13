@@ -7,4 +7,5 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.75"
+log = "0.4.20"
 portable-pty = "0.8.1"
