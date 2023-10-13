@@ -1,7 +1,7 @@
 use std::sync::mpsc::{Receiver, Sender};
 
 use anyhow::Error;
-use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem, Child};
+use portable_pty::{CommandBuilder, NativePtySystem, PtySize, PtySystem};
 
 use std::{
     io::{BufRead, BufReader},
