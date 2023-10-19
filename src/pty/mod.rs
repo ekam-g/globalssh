@@ -35,6 +35,7 @@ impl PtyTerm {
         std::thread::spawn(move || {
             // Consume the output from the child
             let reader = BufReader::new(reader);
+            
             for line in reader.lines() {
                 tx.send(line).expect("Unexpected Thread Closure, Crital Failure");
             }
@@ -51,7 +52,7 @@ impl PtyTerm {
         }
         std::thread::spawn(move || loop {
             let data = rx.recv().expect("Critial Thread Error");
-            if let  Err(e) = writeln!(writer, "{data}") {
+            if let  Err(e) = write!(writer, "{data}") {
                 log::error!("Failed to write due to: {e}");
             }
         });
